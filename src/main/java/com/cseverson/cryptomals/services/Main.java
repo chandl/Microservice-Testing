@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals;
+package com.cseverson.cryptomals.services;
 
 import com.cseverson.cryptomals.services.player.PlayerService;
 import com.cseverson.cryptomals.services.registration.ServiceRegistrationServer;
