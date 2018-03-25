@@ -1,5 +1,6 @@
 package com.cseverson.cryptomals;
 
+import com.cseverson.cryptomals.services.player.PlayerService;
 import com.cseverson.cryptomals.services.registration.ServiceRegistrationServer;
 
 public class Main {
@@ -20,6 +21,8 @@ public class Main {
 
         if(serverName.equals("registration") || serverName.equals("reg")){
             ServiceRegistrationServer.main(args);
+        }else if(serverName.equals("player") || serverName.equals("plr")){
+            PlayerService.main(args);
         }else{
             System.out.println("Unknown server type: " + serverName);
             usage();
