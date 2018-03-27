@@ -1,26 +1,21 @@
-package com.cseverson.cryptomals.controller.player.player;
+package com.cseverson.cryptomals.controller.player;
 
 
-import com.cseverson.cryptomals.model.player.PlayerConfiguration;
+import com.cseverson.cryptomals.player.PlayerTestsMain;
 import org.junit.runner.RunWith;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-@SpringBootApplication
-@Import(PlayerConfiguration.class)
-class PlayersMain {
-    public static void main(String[] args){
 
-        System.setProperty("spring.config.name", "player-server");
-        SpringApplication.run(PlayersMain.class, args);
-    }
-}
-
-
+/**
+ * Spring Integration/System test - by using the @SpringApplicationConfiguration,
+ * it picks up the same configuration that Spring Boot would use.
+ *
+ * @author Chandler Severson
+ */
+@ActiveProfiles("test")
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = PlayersMain.class)
-public class PlayerControllerIntegrationTests extends AbstractPlayerControllerTests{
+@SpringApplicationConfiguration(classes = PlayerTestsMain.class)
+public class PlayerControllerIntegrationTests extends PlayerControllerTest {
 }

@@ -5,12 +5,23 @@ import org.springframework.data.repository.Repository;
 
 import java.util.List;
 
+/**
+ * Repository for Player data implemented using Spring Data JPA.
+ *
+ * @author Chandler Severson
+ */
 public interface PlayerRepository extends Repository<Player, Long> {
 
-    public Player findById(Long id);
+    Player save(Player player);
 
-    public List<Player> findByUserNameIgnoreCase(String user_name);
+    void delete(Player player);
+
+    Iterable<Player> findAll();
+
+    Player findById(Long id);
+
+    List<Player> findByUserNameIgnoreCase(String user_name);
 
     @Query("SELECT count(*) from Player")
-    public int countAccounts();
+    int countAccounts();
 }

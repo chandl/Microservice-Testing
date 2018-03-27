@@ -7,6 +7,11 @@ import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
 
+/**
+ * Persistent player account entity with JPA markup.
+ *
+ * @author Chandler Severson
+ */
 @Entity
 @Table(name = "T_PLAYER")
 public class Player implements Serializable {

@@ -5,8 +5,7 @@ create table T_PLAYER (id bigint identity primary key, heart_count integer,
                         time_played bigint,
                         admin_status boolean,
                         ads_viewed integer,
-                        user_name varchar(64) not null,
-                        unique(user_name));
+                        user_name varchar(64) not null);
 
 ALTER TABLE T_PLAYER ALTER COLUMN heart_count SET DEFAULT 0;
 ALTER TABLE T_PLAYER ALTER COLUMN admin_status SET DEFAULT false;

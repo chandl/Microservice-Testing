@@ -7,4 +7,7 @@ insert into T_PLAYER (user_name, time_played) values ('Ageusia',1230);
 insert into T_PLAYER (user_name, time_played) values ('Fusillade',2310);
 insert into T_PLAYER (user_name, time_played) values ('Wateryfox311',1230);
 insert into T_PLAYER (user_name, time_played) values ('SestinUniped',9840);
-insert into T_PLAYER (user_name, time_played) values ('Borborygmus',3690);
+insert into T_PLAYER (user_name, time_played) values ('duplicateName1',3690);
+insert into T_PLAYER (user_name, time_played) values ('duplicateName2',3690);
+insert into T_PLAYER (user_name, time_played) values ('same',21);
+insert into T_PLAYER (user_name, time_played) values ('same',790);
