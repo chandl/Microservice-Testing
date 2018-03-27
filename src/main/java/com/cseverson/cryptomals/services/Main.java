@@ -33,6 +33,6 @@ public class Main {
     protected static void usage() {
         System.out.println("Usage: java -jar ... <server-name> [server-port]");
         System.out.println(
-                "     where server-name is 'reg', 'registration', " + "'accounts' or 'web' and server-port > 1024");
+                "     where server-name is 'reg', 'registration', " + "'player' or 'plr' and server-port > 1024");
     }
 }
