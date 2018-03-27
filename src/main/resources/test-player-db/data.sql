@@ -11,3 +11,5 @@ insert into T_PLAYER (user_name, time_played) values ('duplicateName1',3690);
 insert into T_PLAYER (user_name, time_played) values ('duplicateName2',3690);
 insert into T_PLAYER (user_name, time_played) values ('same',21);
 insert into T_PLAYER (user_name, time_played) values ('same',790);
+insert into T_PLAYER (user_name, time_played) values ('PlayerToDelete',1337);
+insert into T_PLAYER (user_name, time_played) values ('PlayerToUpdate',8888);

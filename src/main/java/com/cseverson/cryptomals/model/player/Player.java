@@ -6,6 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.logging.Logger;
 
 /**
  * Persistent player account entity with JPA markup.
@@ -16,6 +17,7 @@ import java.sql.Date;
 @Table(name = "T_PLAYER")
 public class Player implements Serializable {
 
+    private static final Logger log = Logger.getLogger(Player.class.getName());
     private static final long serialVersionUID = 1L;
 
     public static Long nextId = 0L;
@@ -58,6 +60,10 @@ public class Player implements Serializable {
     }
 
     public Player(String userName){
+        if(userName == null || userName.length() == 0){
+            log.warning("Player(String userName) FAILED - Blank or Null Username Supplied.");
+            return ;
+        }
         id = getNextId();
         this.userName = userName;
         heartCount = 5; //TODO make the heartCount variable declared in a config file
@@ -67,6 +73,8 @@ public class Player implements Serializable {
         timePlayed = 0L;
         adsViewed = 0;
     }
+
+    //TODO Create Builder Method for a Player
 
     protected static Long getNextId() {
         synchronized (nextId) {
@@ -86,7 +94,7 @@ public class Player implements Serializable {
         return heartCount;
     }
 
-    protected void setHeartCount(int heartCount) {
+    public void setHeartCount(int heartCount) {
         this.heartCount = heartCount;
     }
 
@@ -94,7 +102,7 @@ public class Player implements Serializable {
         return nextHeartTime;
     }
 
-    protected void setNextHeartTime(Date nextHeartTime) {
+    public void setNextHeartTime(Date nextHeartTime) {
         this.nextHeartTime = nextHeartTime;
     }
 
@@ -102,7 +110,7 @@ public class Player implements Serializable {
         return adminStatus;
     }
 
-    protected void setAdminStatus(boolean adminStatus) {
+    public void setAdminStatus(boolean adminStatus) {
         this.adminStatus = adminStatus;
     }
 
@@ -118,7 +126,7 @@ public class Player implements Serializable {
         return timePlayed;
     }
 
-    protected void setTimePlayed(Long timePlayed) {
+    public void setTimePlayed(Long timePlayed) {
         this.timePlayed = timePlayed;
     }
 
@@ -126,7 +134,7 @@ public class Player implements Serializable {
         return adsViewed;
     }
 
-    protected void setAdsViewed(int adsViewed) {
+    public void setAdsViewed(int adsViewed) {
         this.adsViewed = adsViewed;
     }
 

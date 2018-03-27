@@ -4,10 +4,8 @@ import com.cseverson.cryptomals.ex.PlayerNotFoundException;
 import com.cseverson.cryptomals.model.player.Player;
 import com.cseverson.cryptomals.model.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -81,4 +79,31 @@ public class PlayerController {
             return players;
         }
     }
+
+    @RequestMapping(value="/player/create", method=RequestMethod.POST)
+    public ResponseEntity<?> create(@RequestBody Player newPlayer){
+        log.info("player-service create() invoked: ");
+        //TODO implement code to create a Player.
+        return null;
+    }
+
+    @RequestMapping(value="/player/update/{id}", method=RequestMethod.PUT)
+    public ResponseEntity<?> update(@PathVariable("id") Long userId, @RequestBody Player updatedPlayer){
+        log.info("player-service update() invoked: ");
+        //TODO implement code to update a Player.
+
+        return null;
+    }
+
+    @RequestMapping(value="/player/delete/{id}", method=RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable("id") Long userId){
+        log.info("player-service delete() invoked: ");
+        //TODO implement code to delete a Player.
+
+        return null;
+    }
+
+
+
+
 }
