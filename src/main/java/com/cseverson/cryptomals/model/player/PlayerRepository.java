@@ -20,7 +20,7 @@ public interface PlayerRepository extends Repository<Player, Long> {
 
     Player findById(Long id);
 
-    List<Player> findByUserNameIgnoreCase(String user_name);
+    List<Player> findByUserNameContainingIgnoreCase(String user_name);
 
     @Query("SELECT count(*) from Player")
     int countAccounts();

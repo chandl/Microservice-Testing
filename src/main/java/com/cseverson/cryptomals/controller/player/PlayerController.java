@@ -69,7 +69,7 @@ public class PlayerController {
         partialName);
 
         List<Player> players = playerRepository
-                .findByUserNameIgnoreCase(partialName);
+                .findByUserNameContainingIgnoreCase(partialName);
 
         log.info("player-service byName() found: " + players);
 
