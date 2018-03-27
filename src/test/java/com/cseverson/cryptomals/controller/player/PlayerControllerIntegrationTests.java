@@ -1,7 +1,7 @@
 package com.cseverson.cryptomals.controller.player;
 
 
-import com.cseverson.cryptomals.player.PlayerTestsMain;
+import com.cseverson.cryptomals.testrunner.PlayerTestsMain;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;

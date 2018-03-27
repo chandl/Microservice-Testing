@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.player;
+package com.cseverson.cryptomals.testrunner;
 
 import com.cseverson.cryptomals.model.player.PlayerConfiguration;
 import org.springframework.boot.SpringApplication;

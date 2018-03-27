@@ -18,8 +18,6 @@ public class WebPlayerServiceTest {
 
     @Test
     public void findById() {
-        log.info("");
-
     }
 
     @Test
