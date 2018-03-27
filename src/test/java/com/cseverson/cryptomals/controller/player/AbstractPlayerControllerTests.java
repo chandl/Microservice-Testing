@@ -1,5 +1,7 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.controller.player.player;
 
+import com.cseverson.cryptomals.controller.player.PlayerController;
+import com.cseverson.cryptomals.model.player.Player;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

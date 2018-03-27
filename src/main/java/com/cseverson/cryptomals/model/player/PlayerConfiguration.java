@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 //@SpringBootApplication // Combines EnableAutoCOnfiguration, Configuration, and ComponentScan annotations
 @Configuration
-@ComponentScan
+@ComponentScan(basePackages = {"com.cseverson.cryptomals.model.player", "com.cseverson.cryptomals.controller.player"})
 @EntityScan("com.cseverson.cryptomals.model.player") //Specify where JPA @Entity classes are
 @EnableJpaRepositories("com.cseverson.cryptomals.model.player") // Look for classes extending Spring Data's 'Repository marker interface and implement them automatically with JPA.
 @PropertySource("classpath:db-config.properties") // Properties to configure the DataSource

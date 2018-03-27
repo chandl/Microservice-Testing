@@ -1,5 +1,7 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.controller.player;
 
+import com.cseverson.cryptomals.model.player.Player;
+import com.cseverson.cryptomals.model.player.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

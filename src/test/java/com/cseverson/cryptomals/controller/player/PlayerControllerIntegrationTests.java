@@ -1,6 +1,7 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.controller.player.player;
 
 
+import com.cseverson.cryptomals.model.player.PlayerConfiguration;
 import org.junit.runner.RunWith;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
