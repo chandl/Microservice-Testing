@@ -1,6 +1,8 @@
 package com.cseverson.cryptomals.model.player;
 
 import com.cseverson.cryptomals.helper.JSONBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
@@ -165,11 +167,24 @@ public class Player implements Serializable{
 
     @Override
     public String toString() {
-        return "Player{" +
-                "id=" + id +
-                ", heartCount=" + heartCount +
-                ", adminStatus=" + adminStatus +
-                ", userName='" + userName + '\'' +
-                '}';
+
+        String nextHeartTime = (getNextHeartTime() == null)? "NULL":getNextHeartTime().toString();
+        String startDate = (getStartDate() == null) ? "NULL" : getStartDate().toString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode out = mapper.createObjectNode();
+        out.put("id", id)
+                .put("userName", userName)
+                .put("heartCount", heartCount)
+                .put("nextHeartDate", nextHeartTime)
+                .put("adminStatus", adminStatus)
+                .put("startDate", startDate)
+                .put("timePlayed", timePlayed);
+        try {
+            return mapper.writeValueAsString(out);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
