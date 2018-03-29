@@ -1,9 +1,14 @@
 package com.cseverson.cryptomals.controller.player;
 
 import com.cseverson.cryptomals.ex.PlayerNotFoundException;
+import com.cseverson.cryptomals.helper.JSONError;
 import com.cseverson.cryptomals.model.player.Player;
 import com.cseverson.cryptomals.model.player.PlayerRepository;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +33,7 @@ public class PlayerController {
     @Autowired
     public PlayerController(PlayerRepository repository) {
         playerRepository = repository;
-
-        log.info("PlayerRepository says system has " +
-                playerRepository.countAccounts() + " players.");
     }
-
 
     /**
      * Fetch an account with the specified ID.
@@ -80,11 +81,24 @@ public class PlayerController {
         }
     }
 
+    public List<Player> getAllPlayers(){
+        List<Player> out = Lists.newArrayList(playerRepository.findAll());
+        return out;
+    }
+
     @RequestMapping(value="/player/create", method=RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Player newPlayer){
         log.info("player-service create() invoked: ");
-        //TODO implement code to create a Player.
-        return null;
+
+        if(newPlayer == null){ //Send an error response.
+            ObjectNode error = JSONError.create("Null Player Specified");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+
+        //Save the new player.
+        playerRepository.save(newPlayer);
+
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.getJSONString());
     }
 
     @RequestMapping(value="/player/update/{id}", method=RequestMethod.PUT)

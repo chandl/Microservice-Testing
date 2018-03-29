@@ -2,11 +2,15 @@ package com.cseverson.cryptomals.controller.player;
 
 import com.cseverson.cryptomals.ex.PlayerNotFoundException;
 import com.cseverson.cryptomals.model.player.Player;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -135,14 +139,51 @@ public abstract class PlayerControllerTest {
     }
 
     @Test
+    public void createUserNull() {
+        log.info("Start createUserNull test");
+
+        ResponseEntity<?> response = playerController.create(null);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(response.getStatusCode(), HttpStatus.BAD_REQUEST);
+
+        log.info("Bad Response Body: " + response.getBody() + ". Headers: "+ response.getHeaders());
+
+        //Parse the error to make sure we are getting the correct error msg.
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode jsonResponse = mapper.readTree( response.getBody().toString());
+            Assert.assertEquals(jsonResponse.get("error").asText(), "Null Player Specified");
+
+        } catch (IOException e) {
+            Assert.fail("Could not read JSON Response.");
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void createUser(){
         log.info("Start createUser test");
 
         Player newPlayer = new Player(TEST_USER);
         ResponseEntity<?> response = playerController.create(newPlayer);
+        Assert.assertNotNull(response);
 
-        //TODO check response fields
+        log.info("CreateUser response: " + response.getBody() + ". Headers: " + response.getHeaders());
 
+        //Make sure the response is not null and has the appropriate status.
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode jsonResponse = mapper.readTree( response.getBody().toString() );
+            Assert.assertNotNull(jsonResponse);
+            log.info("JsonResponse: " + jsonResponse);
+
+        } catch (IOException e) {
+            Assert.fail("Failure parsing JSON Response.");
+            e.printStackTrace();
+        }
+
+        //Make sure we can find the new player in the DB.
         try {
             List<Player> playersFind = playerController.byName(TEST_USER);
 
@@ -204,6 +245,16 @@ public abstract class PlayerControllerTest {
         log.info("End deleteUser test");
     }
 
+    /**
+     * Helper method to list all players for debugging.
+     */
+    private void listAllPlayers(){
+        int i = 0;
+        for(Player p: playerController.getAllPlayers()){
+            log.info("Player " + i + ": " + p);
+            i++;
+        }
+    }
 
     private Player findByUserName(String name){
         log.info("findByUserName() invoked:");

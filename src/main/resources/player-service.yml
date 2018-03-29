@@ -9,6 +9,6 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:1111/eureka
+      defaultZone: http://192.168.0.150:1111/eureka
   instance:
     leaseRenewalIntervalInSeconds: 5 #<-- DO NOT do this in prod.

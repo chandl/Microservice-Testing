@@ -1,9 +1,10 @@
 package com.cseverson.cryptomals.model.player;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.cseverson.cryptomals.helper.JSONBuilder;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
 import java.util.logging.Logger;
@@ -15,14 +16,17 @@ import java.util.logging.Logger;
  */
 @Entity
 @Table(name = "T_PLAYER")
-public class Player implements Serializable {
+@JsonDeserialize(using = PlayerDeserializer.class)
+public class Player implements Serializable{
 
     private static final Logger log = Logger.getLogger(Player.class.getName());
     private static final long serialVersionUID = 1L;
 
     public static Long nextId = 0L;
+    public static boolean nextIdInit = false;
 
     @Id
+    @GeneratedValue
     protected Long id;
 
     @Column(name = "heart_count")
@@ -64,7 +68,6 @@ public class Player implements Serializable {
             log.warning("Player(String userName) FAILED - Blank or Null Username Supplied.");
             return ;
         }
-        id = getNextId();
         this.userName = userName;
         heartCount = 5; //TODO make the heartCount variable declared in a config file
         nextHeartTime = new Date(new java.util.Date().getTime());
@@ -76,11 +79,12 @@ public class Player implements Serializable {
 
     //TODO Create Builder Method for a Player
 
+    /*
     protected static Long getNextId() {
         synchronized (nextId) {
             return nextId++;
         }
-    }
+    }*/
 
     public Long getId() {
         return id;
@@ -146,6 +150,18 @@ public class Player implements Serializable {
         this.userName = userName;
     }
 
+    public ObjectNode getJSONString(){
+        ObjectNode out = JSONBuilder.builder().getObjectNode();
+        out.put("id", id)
+                .put("userName", userName)
+                .put("heartCount", heartCount)
+                .put("nextHeartDate", nextHeartTime.toString())
+                .put("adminStatus", adminStatus)
+                .put("startDate", startDate.toString())
+                .put("timePlayed", timePlayed);
+
+       return out;
+    }
 
     @Override
     public String toString() {
