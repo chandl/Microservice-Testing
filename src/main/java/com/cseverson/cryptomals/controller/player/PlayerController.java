@@ -65,8 +65,7 @@ public class PlayerController {
      */
     @RequestMapping(value="/players/{name}", method=RequestMethod.GET)
     public List<Player> byName(@PathVariable("name") String partialName) throws PlayerNotFoundException{
-        log.info("player-service byName() invoked: " +
-        playerRepository.getClass().toString() + " for " +
+        log.info("player-service byName() invoked: for " +
         partialName);
 
         List<Player> players = playerRepository
@@ -88,7 +87,7 @@ public class PlayerController {
 
     @RequestMapping(value="/player/create", method=RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Player newPlayer){
-        log.info("player-service create() invoked: ");
+        log.info("player-service create() invoked for: " + newPlayer);
 
         if(newPlayer == null){ //Send an error response.
             ObjectNode error = JSONError.create("Null Player Specified");
@@ -103,7 +102,7 @@ public class PlayerController {
 
     @RequestMapping(value="/player/update/{id}", method=RequestMethod.PUT)
     public ResponseEntity<?> update(@PathVariable("id") Long userId, @RequestBody Player updatedPlayer){
-        log.info("player-service update() invoked: ");
+        log.info("player-service update() invoked for id: " + userId);
         //TODO implement code to update a Player.
 
         return null;
@@ -111,10 +110,26 @@ public class PlayerController {
 
     @RequestMapping(value="/player/delete/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable("id") Long userId){
-        log.info("player-service delete() invoked: ");
-        //TODO implement code to delete a Player.
+        log.info("player-service delete() invoked for id: " + userId);
 
-        return null;
+        //handle null user supplied
+        if(userId == null ){
+            String error = "Null Player ID supplied";
+            log.info(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        //handle bad ID user
+        Player toDelete;
+        if((toDelete = playerRepository.findById(userId)) == null){
+            String error = "Player ID not found: " + userId;
+            log.info(error);
+            ObjectNode out = JSONError.create(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(out);
+        }
+
+        playerRepository.delete(toDelete);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 

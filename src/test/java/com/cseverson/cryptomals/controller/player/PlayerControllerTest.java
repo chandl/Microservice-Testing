@@ -222,16 +222,46 @@ public abstract class PlayerControllerTest {
     }
 
     @Test
-    public void deleteUser(){
-        log.info("Start deleteUser test");
-        Player toDelete = null;
-        if((toDelete = findByUserName(TEST_DELETE_USER)) == null){
-            Assert.fail("Failure Validating Player: " + TEST_DELETE_USER);
+    public void deleteBadUsers(){
+        log.info("Start deleteBadUsers test");
+
+        ResponseEntity<?> badResponse = playerController.delete(null);
+        Assert.assertNotNull(badResponse);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, badResponse.getStatusCode());
+        //Parse the error to make sure we are getting the correct error msg.
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode jsonResponse = mapper.readTree( badResponse.getBody().toString());
+            Assert.assertEquals(jsonResponse.get("error").asText(), "Null Player ID supplied");
+
+        } catch (IOException e) {
+            Assert.fail("Could not read JSON Response for NULL player.");
+            e.printStackTrace();
         }
 
+        Long badId = 10000000L; //user ID that does not exist.
+
+        badResponse = playerController.delete(badId);
+        Assert.assertNotNull(badResponse);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, badResponse.getStatusCode());
+        try {
+            JsonNode jsonResponse = mapper.readTree( badResponse.getBody().toString());
+            Assert.assertEquals(jsonResponse.get("error").asText(), "Player ID not found: " + badId);
+        } catch (IOException e) {
+            Assert.fail("Could not read JSON Response for bad ID player.");
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void deleteUser(){
+        log.info("Start deleteUser test");
+        Player toDelete = findByUserName(TEST_DELETE_USER);
         ResponseEntity<?> response = playerController.delete(toDelete.getId());
 
-        //TODO analyze response
+        //Make sure response is not null and HTTP 200 - OK
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         try {
             Player deleted = null;
