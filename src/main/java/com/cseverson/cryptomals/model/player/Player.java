@@ -152,7 +152,7 @@ public class Player implements Serializable{
         this.userName = userName;
     }
 
-    public ObjectNode getJSONString(){
+    public ObjectNode toObjectNode(){
         String nextHeartTime = (getNextHeartTime() == null)? "NULL":getNextHeartTime().toString();
         String startDate = (getStartDate() == null) ? "NULL" : getStartDate().toString();
 

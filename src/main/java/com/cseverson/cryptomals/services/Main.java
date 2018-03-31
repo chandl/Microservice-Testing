@@ -1,7 +1,7 @@
 package com.cseverson.cryptomals.services;
 
 import com.cseverson.cryptomals.services.player.PlayerService;
-import com.cseverson.cryptomals.services.player.WebPlayerServer;
+import com.cseverson.cryptomals.services.player.web.WebPlayerServer;
 import com.cseverson.cryptomals.services.registration.ServiceRegistrationServer;
 
 public class Main {

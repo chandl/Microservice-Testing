@@ -7,7 +7,6 @@ import com.cseverson.cryptomals.model.player.PlayerRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -110,7 +109,7 @@ public class PlayerController {
         //Save the new player.
         playerRepository.save(newPlayer);
 
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.getJSONString());
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.toObjectNode());
     }
 
     /**
@@ -139,7 +138,7 @@ public class PlayerController {
         }
 
         playerRepository.save(updatedPlayer);
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(updatedPlayer.getJSONString());
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(updatedPlayer.toObjectNode());
     }
 
     /**

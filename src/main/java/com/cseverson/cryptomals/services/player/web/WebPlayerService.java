@@ -1,13 +1,14 @@
-package com.cseverson.cryptomals.services.player;
+package com.cseverson.cryptomals.services.player.web;
 
 import com.cseverson.cryptomals.model.player.Player;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
 public class WebPlayerService {
 
 
-    /*
+    /**
     The restTemplate works because it uses a custom request-factory that uses
     Ribbon (Netflix) to look up the service to use.
      */
@@ -36,33 +37,28 @@ public class WebPlayerService {
         this.serviceUrl = serviceUrl.startsWith("http")? serviceUrl:"http://" + serviceUrl;
     }
 
-    public Player create(String name){
+    public ResponseEntity<ObjectNode> create(String name){
         //TODO - create a new player with this name.
         return null;
     }
 
-    public Player update(Player updatedPlayer){
+    public ResponseEntity<ObjectNode> update(Player updatedPlayer){
         //TODO - update a player
         return null;
     }
 
-    public ResponseEntity<?> delete(Long userId){
+    public ResponseEntity<ObjectNode> delete(Long userId){
         //TODO - delete a player
         return null;
     }
 
-    public Player findById(Long id){
+    public ResponseEntity<ObjectNode> findById(Long id){
         // TODO - search for this id, return null if not found
         return null;
     }
 
-    public List<Player> byUserName(String name){
+    public ResponseEntity<ArrayNode> byUserName(String name){
         // TODO - find a list of players with a similar username.
-        return null;
-    }
-
-    public Player getById(Long id){
-        // TODO - search for this id, throw an exception if not found
         return null;
     }
 

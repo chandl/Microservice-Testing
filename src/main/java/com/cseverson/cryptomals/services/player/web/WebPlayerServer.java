@@ -1,6 +1,6 @@
-package com.cseverson.cryptomals.services.player;
+package com.cseverson.cryptomals.services.player.web;
 
-import com.cseverson.cryptomals.controller.player.WebPlayerController;
+import com.cseverson.cryptomals.controller.player.web.WebPlayerController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -11,7 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 /**
  * Player web-server. Works as a microservice client, fetching data from the
- * Player-Service. Uses the Discover Server (Eureka) to find the microservice.
+ * WebPlayerService. Uses the Discover Server (Eureka) to find the underlying PlayerService.
  *
  * @author Chandler Severson
  * @since 2018-03-30
