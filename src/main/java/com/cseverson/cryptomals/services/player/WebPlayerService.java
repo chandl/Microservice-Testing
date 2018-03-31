@@ -1,14 +1,21 @@
-package com.cseverson.cryptomals.web.player;
+package com.cseverson.cryptomals.services.player;
 
 import com.cseverson.cryptomals.model.player.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Hide the access to the PlayerService microservice inside this local service.
+ *
+ * @author Chandler Severson
+ * @since 2018-03-30
+ */
 @Service
 public class WebPlayerService {
 
@@ -29,19 +36,28 @@ public class WebPlayerService {
         this.serviceUrl = serviceUrl.startsWith("http")? serviceUrl:"http://" + serviceUrl;
     }
 
+    public Player create(String name){
+        //TODO - create a new player with this name.
+        return null;
+    }
+
+    public Player update(Player updatedPlayer){
+        //TODO - update a player
+        return null;
+    }
+
+    public ResponseEntity<?> delete(Long userId){
+        //TODO - delete a player
+        return null;
+    }
 
     public Player findById(Long id){
         // TODO - search for this id, return null if not found
         return null;
     }
 
-    public List<Player> byUserNameContains(String name){
+    public List<Player> byUserName(String name){
         // TODO - find a list of players with a similar username.
-        return null;
-    }
-
-    public Player byUserName(String name){
-        // TODO - explicitly find a player by name.
         return null;
     }
 
