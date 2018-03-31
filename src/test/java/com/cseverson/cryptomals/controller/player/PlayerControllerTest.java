@@ -199,26 +199,64 @@ public abstract class PlayerControllerTest {
     }
 
     @Test
-    public void updateUser(){
-        log.info("Start updateUser test");
+    public void updateUserFail() {
+        log.info("Start updateUserFail test");
+
+        //null user
+        log.info("\tTest NULL user ID");
+        ResponseEntity<?> response = playerController.update(null);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        //unknown player
+        Player plr = new Player("badNameToTestUpdateUserFail");
+        response = playerController.update(plr);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        log.info("End updateUserFail test");
+    }
+
+    @Test
+    public void updateUserSuccess(){
+        log.info("Start updateUserSuccess test");
         Player toUpdate = null;
         if((toUpdate = findByUserName(TEST_UPDATE_USER)) == null){
-           Assert.fail("Failure Validating Player: " + TEST_UPDATE_USER);
+           Assert.fail("Failure Finding Test Update Player: " + TEST_UPDATE_USER);
         }
+
+        log.info("ORIGINAL PLAYER: " + toUpdate);
+        int playerCount = playerController.getAllPlayers().size();
 
         Assert.assertEquals(toUpdate.getAdsViewed(), 0);
         Assert.assertFalse(toUpdate.isAdmin()); //make sure player is not admin prior to updates
 
         toUpdate.setAdsViewed(10);
         toUpdate.setAdminStatus(true); //set player as admin
-        ResponseEntity<?> response = playerController.update(toUpdate.getId(), toUpdate); //update player in DB
+        ResponseEntity<?> response = playerController.update(toUpdate); //update player in DB
 
-        //TODO analyze response
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            JsonNode jsonResponse = mapper.readTree( response.getBody().toString());
+
+            Assert.assertNotNull(jsonResponse);
+            Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        } catch (IOException e) {
+            Assert.fail("Could not read JSON Response for NULL player.");
+            e.printStackTrace();
+        }
+
 
         Player updated = findByUserName(TEST_UPDATE_USER);
         Assert.assertTrue(updated.isAdmin()); //make sure the new, found user is an admin now
         Assert.assertEquals(updated.getAdsViewed(), 10);
-        log.info("End updateUser test");
+
+        log.info("UPDATED PLAYER: " + updated);
+        int playerCount2 = playerController.getAllPlayers().size();
+        Assert.assertEquals(playerCount, playerCount2); //make sure no new players were added, just updated
+
+        log.info("End updateUserSuccess test");
     }
 
     @Test

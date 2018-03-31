@@ -38,8 +38,8 @@ public class PlayerController {
     /**
      * Fetch an account with the specified ID.
      *
-     *
-     * @param id The auto-generated player ID.
+     * @param id
+     *          The auto-generated player ID.
      * @return The account, if found.
      * @throws PlayerNotFoundException If the player ID is not found.
      */
@@ -80,11 +80,24 @@ public class PlayerController {
         }
     }
 
+    /**
+     * Gets all Players from the PlayerRepository.
+     *
+     * Used for Testing .
+     *
+     * @return A list of all players in the database.
+     */
     public List<Player> getAllPlayers(){
         List<Player> out = Lists.newArrayList(playerRepository.findAll());
         return out;
     }
 
+    /**
+     * Adds the specified player to the database.
+     *
+     * @param newPlayer The player to add to the database.
+     * @return BAD_REQUEST or OK
+     */
     @RequestMapping(value="/player/create", method=RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Player newPlayer){
         log.info("player-service create() invoked for: " + newPlayer);
@@ -100,14 +113,41 @@ public class PlayerController {
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.getJSONString());
     }
 
-    @RequestMapping(value="/player/update/{id}", method=RequestMethod.PUT)
-    public ResponseEntity<?> update(@PathVariable("id") Long userId, @RequestBody Player updatedPlayer){
-        log.info("player-service update() invoked for id: " + userId);
-        //TODO implement code to update a Player.
+    /**
+     * Update an existing player in the database.
+     *
+     * @param updatedPlayer The updated player information.
+     * @return BAD_REQUEST or OK
+     */
+    @RequestMapping(value="/player/update", method=RequestMethod.PUT)
+    public ResponseEntity<?> update( @RequestBody Player updatedPlayer){
+        //TODO enable secured requests for these updates.
 
-        return null;
+        log.info("player-service update() invoked for player: " + updatedPlayer);
+
+        //handle null user supplied
+        if(updatedPlayer == null ){
+            String error = "Null Player supplied";
+            log.info(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        if(playerRepository.findById(updatedPlayer.getId()) == null ){
+            String error = "Player not found in the Database. Use the create method instead.";
+            log.info(error);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JSONError.create(error));
+        }
+
+        playerRepository.save(updatedPlayer);
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(updatedPlayer.getJSONString());
     }
 
+    /**
+     * Deletes a player from the database with the specified ID.
+     *
+     * @param userId The ID of the user to delete
+     * @return BAD_REQUEST, NOT_FOUND, or OK
+     */
     @RequestMapping(value="/player/delete/{id}", method=RequestMethod.DELETE)
     public ResponseEntity<?> delete(@PathVariable("id") Long userId){
         log.info("player-service delete() invoked for id: " + userId);
@@ -131,8 +171,5 @@ public class PlayerController {
         playerRepository.delete(toDelete);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
-
-
-
 
 }

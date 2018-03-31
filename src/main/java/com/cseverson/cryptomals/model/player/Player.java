@@ -153,13 +153,16 @@ public class Player implements Serializable{
     }
 
     public ObjectNode getJSONString(){
+        String nextHeartTime = (getNextHeartTime() == null)? "NULL":getNextHeartTime().toString();
+        String startDate = (getStartDate() == null) ? "NULL" : getStartDate().toString();
+
         ObjectNode out = JSONBuilder.builder().getObjectNode();
         out.put("id", id)
                 .put("userName", userName)
                 .put("heartCount", heartCount)
-                .put("nextHeartDate", nextHeartTime.toString())
+                .put("nextHeartDate", nextHeartTime)
                 .put("adminStatus", adminStatus)
-                .put("startDate", startDate.toString())
+                .put("startDate", startDate)
                 .put("timePlayed", timePlayed);
 
        return out;
