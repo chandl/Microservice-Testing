@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 @ComponentScan(basePackages = {"com.cseverson.cryptomals.player_service.model", "com.cseverson.cryptomals.player_service.controller"})
 @EntityScan("com.cseverson.cryptomals.player_service.model") //Specify where JPA @Entity classes are
 @EnableJpaRepositories("com.cseverson.cryptomals.player_service.model") // Look for classes extending Spring Data's 'Repository marker interface and implement them automatically with JPA.
-@PropertySource("classpath:db-config.properties") // Properties to configure the DataSource
+@PropertySource("classpath:player_service/player-db-config.properties") // Properties to configure the DataSource
 public class PlayerConfiguration {
 
     protected Logger log;
@@ -40,8 +40,8 @@ public class PlayerConfiguration {
         log.info("dataSource() invoked");
 
         //TODO Update the datasource to use something like PSQL instead of an embedded test DB (inside of config file).
-        dataSource = (new EmbeddedDatabaseBuilder()).addScript("classpath:test-player-db/schema.sql")
-                .addScript("classpath:test-player-db/data.sql").build();
+        dataSource = (new EmbeddedDatabaseBuilder()).addScript("classpath:player_service/test-player-db/schema.sql")
+                .addScript("classpath:player_service/test-player-db/data.sql").build();
 
         log.info("dataSource = " + dataSource);
 
@@ -63,8 +63,8 @@ public class PlayerConfiguration {
         log.info("TEST dataSource() invoked");
 
         //TODO Update the datasource to use something like PSQL instead of an embedded test DB.
-        dataSource = (new EmbeddedDatabaseBuilder()).addScript("classpath:test-player-db/schema.sql")
-                .addScript("classpath:test-player-db/data.sql").build();
+        dataSource = (new EmbeddedDatabaseBuilder()).addScript("classpath:player_service/test-player-db/schema.sql")
+                .addScript("classpath:player_service/test-player-db/data.sql").build();
 
         log.info("dataSource = " + dataSource);
 

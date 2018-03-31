@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan(basePackages = {"com.cseverson.cryptomals.controller.web.player","com.cseverson.cryptomals.services.web.player" })
+@ComponentScan(basePackages = {"com.cseverson.cryptomals.web_player_service.controller","com.cseverson.cryptomals.web_player_service.service" })
 public class WebPlayerServer {
 
     /**
