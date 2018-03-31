@@ -1,7 +1,6 @@
-package com.cseverson.cryptomals.controller.player.web;
+package com.cseverson.cryptomals.controller.web.player;
 
-import com.cseverson.cryptomals.model.player.Player;
-import com.cseverson.cryptomals.services.player.web.WebPlayerService;
+import com.cseverson.cryptomals.services.web.player.WebPlayerService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,7 @@ public class WebPlayerController {
 
     protected Logger log = Logger.getLogger(WebPlayerController.class.getName());
 
+    @Autowired
     public WebPlayerController(WebPlayerService playerService) {
         this.playerService = playerService;
     }

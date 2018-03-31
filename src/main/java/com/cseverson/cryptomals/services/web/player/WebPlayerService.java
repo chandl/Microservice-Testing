@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.services.player.web;
+package com.cseverson.cryptomals.services.web.player;
 
 import com.cseverson.cryptomals.model.player.Player;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -33,6 +33,7 @@ public class WebPlayerService {
 
     protected static Logger log = Logger.getLogger(WebPlayerService.class.getName());
 
+
     public WebPlayerService(String serviceUrl) {
         this.serviceUrl = serviceUrl.startsWith("http")? serviceUrl:"http://" + serviceUrl;
     }
@@ -54,6 +55,15 @@ public class WebPlayerService {
 
     public ResponseEntity<ObjectNode> findById(Long id){
         // TODO - search for this id, return null if not found
+        log.info("findById() invoked for: " + id);
+
+        Player player = restTemplate.getForObject(serviceUrl + "/player/{id}", Player.class, id);
+
+        if(player == null){
+            //return not found
+        }
+
+
         return null;
     }
 

@@ -1,6 +1,6 @@
-package com.cseverson.cryptomals.services.player.web;
+package com.cseverson.cryptomals.services.web.player;
 
-import com.cseverson.cryptomals.controller.player.web.WebPlayerController;
+import com.cseverson.cryptomals.controller.web.player.WebPlayerController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan(useDefaultFilters = false)
+@ComponentScan(basePackages = {"com.cseverson.cryptomals.controller.web.player","com.cseverson.cryptomals.services.web.player" })
 public class WebPlayerServer {
 
     /**

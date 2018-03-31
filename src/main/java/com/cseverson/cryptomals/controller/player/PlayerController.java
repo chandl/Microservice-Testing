@@ -43,13 +43,15 @@ public class PlayerController {
      * @throws PlayerNotFoundException If the player ID is not found.
      */
     @RequestMapping(value="/player/{id}", method= RequestMethod.GET)
-    public Player byId(@PathVariable("id") Long id) throws PlayerNotFoundException {
+    public Player byId(@PathVariable("id") Long id)  {
         log.info("player-service byId() invoked: " + id);
         Player player = playerRepository.findById(id);
         log.info("player-service byId() found: " + player);
 
-        if (player == null)
-            throw new PlayerNotFoundException("Player with ID " + id + " not found.");
+        if (player == null){
+            log.warning("Player with ID " + id + " not found.");
+            return null;
+        }
         else{
             return player;
         }

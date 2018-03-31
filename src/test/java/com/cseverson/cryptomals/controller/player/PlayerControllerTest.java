@@ -53,16 +53,12 @@ public abstract class PlayerControllerTest {
     public void findById(){
         log.info("Start findById test");
 
-        try{
-            Player p = playerController.byId(PLAYER_ID);
+        Player p = playerController.byId(PLAYER_ID);
 
-            Assert.assertNotNull(p);
-            Assert.assertEquals(p.getUserName(), PLAYER_NAME);
+        Assert.assertNotNull(p);
+        Assert.assertEquals(p.getUserName(), PLAYER_NAME);
 
-        } catch (PlayerNotFoundException ex){
-            Assert.fail("Caught an exception while finding player by ID.");
-            ex.printStackTrace();
-        }
+
 
         log.info("End findById test");
     }
@@ -70,12 +66,10 @@ public abstract class PlayerControllerTest {
     @Test
     public void findByIdFail(){
         log.info("Start findByIdFail test");
-        try{
-            playerController.byId(-1L);
-            Assert.fail("Expected an Exception for the account not being found.");
-        }catch (Exception e){
 
-        }
+        Player p = playerController.byId(1000L);
+        Assert.assertNull(p);
+
         log.info("End findByIdFail test");
     }
 
@@ -301,14 +295,12 @@ public abstract class PlayerControllerTest {
         Assert.assertNotNull(response);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        try {
-            Player deleted = null;
-            if((deleted = playerController.byId(toDelete.getId())) != null){
-                Assert.fail("Deleted player is still returning as non-null: " + deleted);
-            }
-        } catch (PlayerNotFoundException e) {
-            //Success!
+
+        Player deleted = null;
+        if((deleted = playerController.byId(toDelete.getId())) != null){
+            Assert.fail("Deleted player is still returning as non-null: " + deleted);
         }
+
 
         log.info("End deleteUser test");
     }
