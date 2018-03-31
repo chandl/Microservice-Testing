@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @SpringBootApplication
 @EnableDiscoveryClient
-@ComponentScan(basePackages = {"com.cseverson.cryptomals.web_player_service.controller","com.cseverson.cryptomals.web_player_service.service" })
+@ComponentScan(useDefaultFilters = false)
 public class WebPlayerServer {
 
     /**
@@ -27,7 +27,7 @@ public class WebPlayerServer {
     public static final String PLAYER_SERVICE_URL = "http://PLAYER-SERVICE";
 
     public static void main(String[] args){
-        System.setProperty("spring.config.name", "web-player-server");
+        System.setProperty("spring.config.name", "web_player_service/web-player-server");
         SpringApplication.run(WebPlayerServer.class, args);
     }
 

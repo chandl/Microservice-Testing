@@ -20,7 +20,7 @@ public class WebPlayerController {
 
     protected Logger log = Logger.getLogger(WebPlayerController.class.getName());
 
-
+    @Autowired
     public WebPlayerController(WebPlayerService playerService) {
         this.playerService = playerService;
     }

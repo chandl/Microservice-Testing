@@ -1,16 +1,14 @@
-# Spring properties
+# Spring Properties
 spring:
   application:
     name: web-player-server
 
-# HTTP server
 server:
   port: 3333
 
-# Service Discovery (Eureka)
 eureka:
-  instance:
-    leaseRenewalIntervalSeconds: 5 # DO NOT DO THIS IN PROD
   client:
     serviceUrl:
       defaultZone: http://192.168.0.150:1111/eureka
+  instance:
+    leaseRenewalIntervalInSeconds: 5 #<-- DO NOT do this in prod.

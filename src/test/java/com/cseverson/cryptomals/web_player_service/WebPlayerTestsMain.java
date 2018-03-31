@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class WebPlayerTestsMain {
     public static void main(String[] args){
-        System.setProperty("spring.config.name", "player-server");
+        System.setProperty("spring.config.name", "web-player-server");
         SpringApplication.run(WebPlayerTestsMain.class, args);
     }
 }

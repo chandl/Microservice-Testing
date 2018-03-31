@@ -21,7 +21,7 @@ public class PlayerService {
     protected Logger log = Logger.getLogger(PlayerService.class.getName());
 
     public static void main(String[] args){
-        System.setProperty("spring.config.name", "player-service");
+        System.setProperty("spring.config.name", "player_service/player-service");
         SpringApplication.run(PlayerService.class, args);
     }
 }

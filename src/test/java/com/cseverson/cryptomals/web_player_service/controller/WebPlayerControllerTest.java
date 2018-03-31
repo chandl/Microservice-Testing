@@ -1,6 +1,5 @@
 package com.cseverson.cryptomals.web_player_service.controller;
 
-import com.cseverson.cryptomals.web_player_service.controller.WebPlayerController;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
