@@ -1,6 +1,6 @@
 package com.cseverson.cryptomals.testrunner;
 
-import com.cseverson.cryptomals.services.web.player.WebPlayerService;
+import com.cseverson.cryptomals.web_player_service.service.WebPlayerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

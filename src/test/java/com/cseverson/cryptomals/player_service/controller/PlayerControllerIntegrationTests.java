@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.controller.player;
+package com.cseverson.cryptomals.player_service.controller;
 
 
 import com.cseverson.cryptomals.testrunner.PlayerTestsMain;

@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.player_service.model;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;

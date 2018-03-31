@@ -1,7 +1,7 @@
-package com.cseverson.cryptomals.services.player;
+package com.cseverson.cryptomals.player_service.service;
 
-import com.cseverson.cryptomals.model.player.PlayerConfiguration;
-import com.cseverson.cryptomals.model.player.PlayerRepository;
+import com.cseverson.cryptomals.player_service.model.PlayerConfiguration;
+import com.cseverson.cryptomals.player_service.model.PlayerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

@@ -17,7 +17,7 @@
 
     <properties>
         <!-- Stand-alone RESTFul application for testing only -->
-        <start-class>com.cseverson.cryptomals.services.Main</start-class>
+        <start-class>com.cseverson.cryptomals.Main</start-class>
     </properties>
 
     <dependencies>

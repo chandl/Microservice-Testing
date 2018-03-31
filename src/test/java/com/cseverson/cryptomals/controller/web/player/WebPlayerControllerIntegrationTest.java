@@ -1,6 +1,6 @@
 package com.cseverson.cryptomals.controller.web.player;
 
-import com.cseverson.cryptomals.services.web.player.WebPlayerServer;
+import com.cseverson.cryptomals.web_player_service.service.WebPlayerServer;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;

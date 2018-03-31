@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.player_service.model;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

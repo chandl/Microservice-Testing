@@ -1,9 +1,9 @@
-package com.cseverson.cryptomals.controller.player;
+package com.cseverson.cryptomals.player_service.controller;
 
-import com.cseverson.cryptomals.ex.PlayerNotFoundException;
+import com.cseverson.cryptomals.player_service.ex.PlayerNotFoundException;
 import com.cseverson.cryptomals.helper.JSONError;
-import com.cseverson.cryptomals.model.player.Player;
-import com.cseverson.cryptomals.model.player.PlayerRepository;
+import com.cseverson.cryptomals.player_service.model.Player;
+import com.cseverson.cryptomals.player_service.model.PlayerRepository;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;

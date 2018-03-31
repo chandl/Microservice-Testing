@@ -1,6 +1,6 @@
-package com.cseverson.cryptomals.services.web.player;
+package com.cseverson.cryptomals.web_player_service.service;
 
-import com.cseverson.cryptomals.model.player.Player;
+import com.cseverson.cryptomals.player_service.model.Player;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;

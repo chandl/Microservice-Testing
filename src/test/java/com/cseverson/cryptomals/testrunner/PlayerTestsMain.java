@@ -1,12 +1,13 @@
 package com.cseverson.cryptomals.testrunner;
 
-import com.cseverson.cryptomals.model.player.PlayerConfiguration;
+import com.cseverson.cryptomals.player_service.model.PlayerConfiguration;
+import com.cseverson.cryptomals.player_service.service.PlayerService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 /**
- * Simulate the {@link com.cseverson.cryptomals.services.player.PlayerService}, without using any of the discovery client
+ * Simulate the {@link PlayerService}, without using any of the discovery client
  * code. Allows the test to use the same configuration as the PlayerService would.
  *
  * @author Chandler Severson

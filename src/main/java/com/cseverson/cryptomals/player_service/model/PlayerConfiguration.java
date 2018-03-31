@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.model.player;
+package com.cseverson.cryptomals.player_service.model;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  * @author Chandler Severson
  */
 @Configuration
-@ComponentScan(basePackages = {"com.cseverson.cryptomals.model.player", "com.cseverson.cryptomals.controller.player"})
-@EntityScan("com.cseverson.cryptomals.model.player") //Specify where JPA @Entity classes are
-@EnableJpaRepositories("com.cseverson.cryptomals.model.player") // Look for classes extending Spring Data's 'Repository marker interface and implement them automatically with JPA.
+@ComponentScan(basePackages = {"com.cseverson.cryptomals.player_service.model", "com.cseverson.cryptomals.player_service.controller"})
+@EntityScan("com.cseverson.cryptomals.player_service.model") //Specify where JPA @Entity classes are
+@EnableJpaRepositories("com.cseverson.cryptomals.player_service.model") // Look for classes extending Spring Data's 'Repository marker interface and implement them automatically with JPA.
 @PropertySource("classpath:db-config.properties") // Properties to configure the DataSource
 public class PlayerConfiguration {
 
