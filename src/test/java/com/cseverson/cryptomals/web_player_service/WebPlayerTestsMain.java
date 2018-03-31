@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.testrunner;
+package com.cseverson.cryptomals.web_player_service;
 
 import com.cseverson.cryptomals.web_player_service.service.WebPlayerService;
 import org.springframework.boot.SpringApplication;

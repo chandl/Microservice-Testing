@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.testrunner;
+package com.cseverson.cryptomals.player_service;
 
 import com.cseverson.cryptomals.player_service.model.PlayerConfiguration;
 import com.cseverson.cryptomals.player_service.service.PlayerService;

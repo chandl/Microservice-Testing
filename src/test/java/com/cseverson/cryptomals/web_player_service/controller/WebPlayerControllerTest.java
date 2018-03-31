@@ -1,4 +1,4 @@
-package com.cseverson.cryptomals.controller.web.player;
+package com.cseverson.cryptomals.web_player_service.controller;
 
 import com.cseverson.cryptomals.web_player_service.controller.WebPlayerController;
 import org.junit.Test;
