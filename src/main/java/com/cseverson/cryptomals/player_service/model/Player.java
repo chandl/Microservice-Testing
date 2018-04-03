@@ -32,25 +32,25 @@ public class Player implements Serializable{
     @GeneratedValue
     protected Long id;
 
-    @Column(name = "heart_count")
+    @Column(name = Const.DB.PLAYER_HEART_COUNT_COL)
     protected int heartCount;
 
-    @Column(name = "next_heart_time")
+    @Column(name = Const.DB.PLAYER_NEXT_HEART_COL)
     protected Date nextHeartTime;
 
-    @Column(name = "admin_status")
+    @Column(name = Const.DB.PLAYER_ADMIN_STATUS_COL)
     protected boolean adminStatus;
 
-    @Column(name = "start_date")
+    @Column(name = Const.DB.PLAYER_START_DATE_COL)
     protected Date startDate;
 
-    @Column(name = "time_played")
+    @Column(name = Const.DB.PLAYER_TIME_PLAYED_COL)
     protected Long timePlayed;
 
-    @Column(name = "ads_viewed")
+    @Column(name = Const.DB.PLAYER_ADS_VIEWED_COL)
     protected int adsViewed;
 
-    @Column(name = Const.PLAYER_USERNAME_COL)
+    @Column(name = Const.DB.PLAYER_USERNAME_COL)
     protected String userName;
 
 
