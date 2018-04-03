@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -41,7 +43,13 @@ public class WebPlayerService {
 
     public ResponseEntity<ObjectNode> create(String name){
         //TODO - create a new player with this name.
-        return null;
+        log.info("create() invoked for: " + name);
+        HttpEntity<Player> request = new HttpEntity<Player>(new Player(name));
+        Player player = restTemplate.postForObject(serviceUrl + "/player/create", request, Player.class);
+
+        log.info("Player Created: " + player);
+
+        return ResponseEntity.status(HttpStatus.OK).body(player.toObjectNode());
     }
 
     public ResponseEntity<ObjectNode> update(Player updatedPlayer){

@@ -16,7 +16,7 @@ import java.util.logging.Logger;
 
 
 public abstract class PlayerControllerTest {
-    protected static final Long PLAYER_ID = 0L;
+    protected static final Long PLAYER_ID = 1L;
     protected static final String PLAYER_NAME = "spews";
 
     protected static final String TWO_DUPLICATE_NAME = "duplicateName";
