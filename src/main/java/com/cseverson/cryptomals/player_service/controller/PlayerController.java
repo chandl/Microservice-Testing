@@ -1,5 +1,7 @@
 package com.cseverson.cryptomals.player_service.controller;
 
+import com.cseverson.cryptomals.common.Const;
+import com.cseverson.cryptomals.common.Routes;
 import com.cseverson.cryptomals.player_service.ex.PlayerNotFoundException;
 import com.cseverson.cryptomals.helper.JSONError;
 import com.cseverson.cryptomals.player_service.model.Player;
@@ -42,8 +44,8 @@ public class PlayerController {
      * @return The account, if found.
      * @throws PlayerNotFoundException If the player ID is not found.
      */
-    @RequestMapping(value="/player/{id}", method= RequestMethod.GET)
-    public Player byId(@PathVariable("id") Long id)  {
+    @RequestMapping(value=Routes.GET_PLAYER_BY_ID, method= RequestMethod.GET)
+    public Player byId(@PathVariable(Const.PLAYER_ID) Long id)  {
         log.info("player-service byId() invoked: " + id);
         Player player = playerRepository.findById(id);
         log.info("player-service byId() found: " + player);
@@ -64,8 +66,8 @@ public class PlayerController {
      * @return A non-null, non-empty List of accounts.
      * @throws PlayerNotFoundException If there are no matches at all.
      */
-    @RequestMapping(value="/players/{name}", method=RequestMethod.GET)
-    public List<Player> byName(@PathVariable("name") String partialName) throws PlayerNotFoundException{
+    @RequestMapping(value=Routes.GET_PLAYERS_BY_NAME, method=RequestMethod.GET)
+    public List<Player> byName(@PathVariable(Const.PLAYER_USERNAME) String partialName) throws PlayerNotFoundException{
         log.info("player-service byName() invoked: for " +
         partialName);
 
@@ -99,7 +101,7 @@ public class PlayerController {
      * @param newPlayer The player to add to the database.
      * @return BAD_REQUEST or OK
      */
-    @RequestMapping(value="/player/create", method=RequestMethod.POST)
+    @RequestMapping(value=Routes.POST_CREATE_PLAYER, method=RequestMethod.POST)
     public ResponseEntity<?> create(@RequestBody Player newPlayer){
         log.info("player-service create() invoked for: " + newPlayer);
 
@@ -111,7 +113,7 @@ public class PlayerController {
         //Save the new player.
         playerRepository.save(newPlayer);
 
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.toObjectNode());
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer);
     }
 
     /**
@@ -120,7 +122,7 @@ public class PlayerController {
      * @param updatedPlayer The updated player information.
      * @return BAD_REQUEST or OK
      */
-    @RequestMapping(value="/player/update", method=RequestMethod.PUT)
+    @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT)
     public ResponseEntity<?> update( @RequestBody Player updatedPlayer){
         //TODO enable secured requests for these updates.
 
@@ -149,12 +151,12 @@ public class PlayerController {
      * @param userId The ID of the user to delete
      * @return BAD_REQUEST, NOT_FOUND, or OK
      */
-    @RequestMapping(value="/player/delete/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<?> delete(@PathVariable("id") Long userId){
+    @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE)
+    public ResponseEntity<?> delete(@PathVariable(Const.PLAYER_ID) Long userId){
         log.info("player-service delete() invoked for id: " + userId);
 
         //handle null user supplied
-        if(userId == null ){
+        if( userId == null ){
             String error = "Null Player ID supplied";
             log.info(error);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));

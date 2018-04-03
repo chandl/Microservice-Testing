@@ -1,5 +1,7 @@
 package com.cseverson.cryptomals.web_player_service.controller;
 
+import com.cseverson.cryptomals.common.Const;
+import com.cseverson.cryptomals.common.Routes;
 import com.cseverson.cryptomals.web_player_service.service.WebPlayerService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -27,35 +29,37 @@ public class WebPlayerController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder){
-        binder.setAllowedFields("id", "userName");
+        binder.setAllowedFields(Const.PLAYER_ID, Const.PLAYER_USERNAME);
     }
 
-    @RequestMapping(value = "/player/create/{userName}", method = RequestMethod.POST)
-    public ResponseEntity<ObjectNode> create(@PathVariable("userName") String userName){
+    @RequestMapping(value = Routes.W_POST_CREATE_PLAYER, method = RequestMethod.POST)
+    public ResponseEntity<ObjectNode> create(@PathVariable(Const.PLAYER_USERNAME) String userName){
 
         log.info("web-player-service create() invoked: " + userName);
-        ResponseEntity<ObjectNode> output = playerService.create(userName);
+        ResponseEntity<?> output = playerService.create(userName);
         log.info("web-player-service create() created: " + output.toString());
+
+
 
         //TODO account for errors
 
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(output.getBody());
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body((ObjectNode) output.getBody());
     }
 
-    @RequestMapping(value="/player/update", method=RequestMethod.PUT)
+    @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT)
     public ResponseEntity<ObjectNode> update(@RequestBody String updatedPlayerJSON ){
         //TODO - create update()
         return null;
     }
 
-    @RequestMapping(value="/player/delete/{id}", method=RequestMethod.DELETE)
-    public ResponseEntity<ObjectNode> delete(@PathVariable("id") Long userId){
+    @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE)
+    public ResponseEntity<ObjectNode> delete(@PathVariable(Const.PLAYER_ID) Long userId){
         //TODO - create delete()
         return null;
     }
 
-    @RequestMapping(value="/player/{id}", method=RequestMethod.GET)
-    public ResponseEntity<ObjectNode> findById(@PathVariable("id") Long id){
+    @RequestMapping(value=Routes.GET_PLAYER_BY_ID, method=RequestMethod.GET)
+    public ResponseEntity<ObjectNode> findById(@PathVariable(Const.PLAYER_ID) Long id){
 
         //TODO - create findById()
 
@@ -64,8 +68,8 @@ public class WebPlayerController {
     }
 
 
-    @RequestMapping(value = "players/{userName}", method=RequestMethod.GET)
-    public ResponseEntity<ArrayNode> findByName(@PathVariable("userName") String userName){
+    @RequestMapping(value = Routes.GET_PLAYERS_BY_NAME, method=RequestMethod.GET)
+    public ResponseEntity<ArrayNode> findByName(@PathVariable(Const.PLAYER_USERNAME) String userName){
         //TODO - create findByName()
 
         //PlayerContorller will respond with a List of Player objects. Must convert to ArrayNode

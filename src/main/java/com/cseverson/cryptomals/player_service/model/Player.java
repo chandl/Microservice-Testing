@@ -1,5 +1,6 @@
 package com.cseverson.cryptomals.player_service.model;
 
+import com.cseverson.cryptomals.common.Const;
 import com.cseverson.cryptomals.helper.JSONBuilder;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +50,7 @@ public class Player implements Serializable{
     @Column(name = "ads_viewed")
     protected int adsViewed;
 
-    @Column(name = "user_name")
+    @Column(name = Const.PLAYER_USERNAME_COL)
     protected String userName;
 
 
@@ -157,13 +158,13 @@ public class Player implements Serializable{
         String startDate = (getStartDate() == null) ? "NULL" : getStartDate().toString();
 
         ObjectNode out = JSONBuilder.builder().getObjectNode();
-        out.put("id", id)
-                .put("userName", userName)
-                .put("heartCount", heartCount)
-                .put("nextHeartDate", nextHeartTime)
-                .put("adminStatus", adminStatus)
-                .put("startDate", startDate)
-                .put("timePlayed", timePlayed);
+        out.put(Const.PLAYER_ID, id)
+                .put(Const.PLAYER_USERNAME, userName)
+                .put(Const.PLAYER_HEART_COUNT, heartCount)
+                .put(Const.PLAYER_NEXT_HEART_DATE, nextHeartTime)
+                .put(Const.PLAYER_ADMIN_STATUS, adminStatus)
+                .put(Const.PLAYER_START_DATE, startDate)
+                .put(Const.PLAYER_TIME_PLAYED, timePlayed);
 
        return out;
     }
@@ -176,13 +177,13 @@ public class Player implements Serializable{
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode out = mapper.createObjectNode();
-        out.put("id", id)
-                .put("userName", userName)
-                .put("heartCount", heartCount)
-                .put("nextHeartDate", nextHeartTime)
-                .put("adminStatus", adminStatus)
-                .put("startDate", startDate)
-                .put("timePlayed", timePlayed);
+        out.put(Const.PLAYER_ID, id)
+                .put(Const.PLAYER_USERNAME, userName)
+                .put(Const.PLAYER_HEART_COUNT, heartCount)
+                .put(Const.PLAYER_NEXT_HEART_DATE, nextHeartTime)
+                .put(Const.PLAYER_ADMIN_STATUS, adminStatus)
+                .put(Const.PLAYER_START_DATE, startDate)
+                .put(Const.PLAYER_TIME_PLAYED, timePlayed);
         try {
             return mapper.writeValueAsString(out);
         } catch (JsonProcessingException e) {

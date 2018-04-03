@@ -45,6 +45,11 @@ public class WebPlayerService {
         //TODO - create a new player with this name.
         log.info("create() invoked for: " + name);
         HttpEntity<Player> request = new HttpEntity<Player>(new Player(name));
+
+        ResponseEntity<?> test = restTemplate.postForEntity(serviceUrl + "/player/create", request, String.class );
+
+        log.info("Test Response: " + test);
+
         Player player = restTemplate.postForObject(serviceUrl + "/player/create", request, Player.class);
 
         log.info("Player Created: " + player);
