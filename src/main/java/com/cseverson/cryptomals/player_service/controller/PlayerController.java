@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -101,7 +102,7 @@ public class PlayerController {
      * @param newPlayer The player to add to the database.
      * @return BAD_REQUEST or OK
      */
-    @RequestMapping(value=Routes.POST_CREATE_PLAYER, method=RequestMethod.POST)
+    @RequestMapping(value=Routes.POST_CREATE_PLAYER, method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> create(@RequestBody Player newPlayer){
         log.info("player-service create() invoked for: " + newPlayer);
 
@@ -112,8 +113,11 @@ public class PlayerController {
 
         //Save the new player.
         playerRepository.save(newPlayer);
+        ResponseEntity<ObjectNode> response = ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.toObjectNode());
 
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer);
+        log.info("player-service create() returned: " +  response);
+
+        return response;
     }
 
     /**

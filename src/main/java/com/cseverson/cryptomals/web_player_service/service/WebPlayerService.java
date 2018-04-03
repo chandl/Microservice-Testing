@@ -4,7 +4,6 @@ import com.cseverson.cryptomals.player_service.model.Player;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
@@ -46,15 +45,14 @@ public class WebPlayerService {
         log.info("create() invoked for: " + name);
         HttpEntity<Player> request = new HttpEntity<Player>(new Player(name));
 
-        ResponseEntity<?> test = restTemplate.postForEntity(serviceUrl + "/player/create", request, String.class );
+        ResponseEntity<ObjectNode> response = restTemplate.postForEntity(serviceUrl + "/player/create", request, ObjectNode.class );
+        log.info("Response: " + response + ". Type: " + response.getBody().getClass());
 
-        log.info("Test Response: " + test);
+        if(response.getStatusCode() != HttpStatus.OK){
+            //TODO error handling
+        }
 
-        Player player = restTemplate.postForObject(serviceUrl + "/player/create", request, Player.class);
-
-        log.info("Player Created: " + player);
-
-        return ResponseEntity.status(HttpStatus.OK).body(player.toObjectNode());
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
     public ResponseEntity<ObjectNode> update(Player updatedPlayer){

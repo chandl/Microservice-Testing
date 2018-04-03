@@ -9,6 +9,8 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -36,7 +38,9 @@ public class PlayerDeserializer extends JsonDeserializer {
             }
 
             log.info("Player ID is null. Returning new player:  " + name);
-            return controller.create(new Player(name)).getBody();
+            Player p = new Player(name);
+
+            return p;
         }else{
             Player p = controller.byId(id);
 
