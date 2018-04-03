@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 /**
@@ -36,13 +37,13 @@ public class Player implements Serializable{
     protected int heartCount;
 
     @Column(name = Const.DB.PLAYER_NEXT_HEART_COL)
-    protected Date nextHeartTime;
+    protected Timestamp nextHeartTime;
 
     @Column(name = Const.DB.PLAYER_ADMIN_STATUS_COL)
     protected boolean adminStatus;
 
     @Column(name = Const.DB.PLAYER_START_DATE_COL)
-    protected Date startDate;
+    protected Timestamp startDate;
 
     @Column(name = Const.DB.PLAYER_TIME_PLAYED_COL)
     protected Long timePlayed;
@@ -73,9 +74,10 @@ public class Player implements Serializable{
         }
         this.userName = userName;
         heartCount = 5; //TODO make the heartCount variable declared in a config file
-        nextHeartTime = new Date(new java.util.Date().getTime());
+        long time = System.currentTimeMillis();
+        nextHeartTime = new Timestamp(time);
         adminStatus = false;
-        startDate = new Date(new java.util.Date().getTime());
+        startDate = new Timestamp(time);
         timePlayed = 0L;
         adsViewed = 0;
     }
@@ -105,11 +107,11 @@ public class Player implements Serializable{
         this.heartCount = heartCount;
     }
 
-    public Date getNextHeartTime() {
+    public Timestamp getNextHeartTime() {
         return nextHeartTime;
     }
 
-    public void setNextHeartTime(Date nextHeartTime) {
+    public void setNextHeartTime(Timestamp nextHeartTime) {
         this.nextHeartTime = nextHeartTime;
     }
 
@@ -121,11 +123,11 @@ public class Player implements Serializable{
         this.adminStatus = adminStatus;
     }
 
-    public Date getStartDate() {
+    public Timestamp getStartDate() {
         return startDate;
     }
 
-    protected void setStartDate(Date startDate) {
+    protected void setStartDate(Timestamp startDate) {
         this.startDate = startDate;
     }
 
