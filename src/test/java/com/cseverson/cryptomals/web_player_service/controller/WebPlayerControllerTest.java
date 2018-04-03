@@ -1,5 +1,6 @@
 package com.cseverson.cryptomals.web_player_service.controller;
 
+import com.netflix.discovery.DiscoveryClient;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,6 +12,7 @@ public class WebPlayerControllerTest {
     //==========create==========
     @Test
     public void createPlayerSuccess() {
+
 
         //success: player is created successfully
 

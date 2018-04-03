@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Import;
 @Import(PlayerConfiguration.class)
 public class PlayerTestsMain {
     public static void main(String[] args){
-        System.setProperty("spring.config.name", "web-player-server");
+        System.setProperty("spring.config.name", "player-service");
         SpringApplication.run(PlayerTestsMain.class, args);
     }
 }

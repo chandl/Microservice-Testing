@@ -35,7 +35,6 @@ public class WebPlayerService {
 
     protected static Logger log = Logger.getLogger(WebPlayerService.class.getName());
 
-
     public WebPlayerService(String serviceUrl) {
         this.serviceUrl = serviceUrl.startsWith("http")? serviceUrl:"http://" + serviceUrl;
     }
