@@ -4,7 +4,7 @@ import com.cseverson.cryptomals.player_service.service.PlayerService;
 import com.cseverson.cryptomals.web_player_service.service.WebPlayerServer;
 import com.cseverson.cryptomals.registration_service.service.ServiceRegistrationServer;
 
-public class Main {
+class Main {
 
     public static void main(String[] args){
         String serverName = "NO-VALUE";
@@ -33,7 +33,7 @@ public class Main {
 
     }
 
-    protected static void usage() {
+    private static void usage() {
         System.out.println("Usage: java -jar ... <server-name> [server-port]");
         System.out.println(
                 "     where server-name is 'reg', 'registration', " + "'player' or 'plr' and server-port > 1024");

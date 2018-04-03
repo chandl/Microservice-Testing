@@ -15,14 +15,14 @@ import java.util.logging.Logger;
 
 public class PlayerDeserializer extends JsonDeserializer {
 
-    private static Logger log = Logger.getLogger(PlayerDeserializer.class.getName());
+    private static final Logger log = Logger.getLogger(PlayerDeserializer.class.getName());
 
     @Autowired
     PlayerController controller;
 
 
     @Override
-    public Object deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException{
+    public Object deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         log.info("PlayerDeserializer deserialize() invoked. ");
         ObjectCodec oc = jsonParser.getCodec();
         JsonNode node = oc.readTree(jsonParser);

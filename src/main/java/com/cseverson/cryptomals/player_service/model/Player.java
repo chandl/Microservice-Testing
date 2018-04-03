@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.logging.Logger;
 
@@ -18,6 +17,7 @@ import java.util.logging.Logger;
  *
  * @author Chandler Severson
  */
+@SuppressWarnings("WeakerAccess")
 @Entity
 @Table(name = "T_PLAYER")
 @JsonDeserialize(using = PlayerDeserializer.class)

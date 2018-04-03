@@ -22,7 +22,7 @@ import java.util.logging.Logger;
  */
 @RestController
 public class PlayerController {
-    protected Logger log = Logger.getLogger(PlayerController.class.getName());
+    private final Logger log = Logger.getLogger(PlayerController.class.getName());
 
     protected PlayerRepository playerRepository;
 
@@ -43,7 +43,6 @@ public class PlayerController {
      * @param id
      *          The auto-generated player ID.
      * @return The account, if found.
-     * @throws PlayerNotFoundException If the player ID is not found.
      */
     @RequestMapping(value=Routes.GET_PLAYER_BY_ID, method= RequestMethod.GET)
     public Player byId(@PathVariable(Const.PLAYER_ID) Long id)  {
@@ -92,8 +91,7 @@ public class PlayerController {
      * @return A list of all players in the database.
      */
     public List<Player> getAllPlayers(){
-        List<Player> out = Lists.newArrayList(playerRepository.findAll());
-        return out;
+        return Lists.newArrayList(playerRepository.findAll());
     }
 
     /**

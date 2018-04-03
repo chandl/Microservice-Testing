@@ -1,6 +1,5 @@
 package com.cseverson.cryptomals.player_service.model;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -25,7 +24,7 @@ import java.util.logging.Logger;
 @PropertySource("classpath:player_service/player-db-config.properties") // Properties to configure the DataSource
 public class PlayerConfiguration {
 
-    protected Logger log;
+    private final Logger log;
     protected DataSource dataSource;
 
     public PlayerConfiguration() { log = Logger.getLogger(getClass().getName());}

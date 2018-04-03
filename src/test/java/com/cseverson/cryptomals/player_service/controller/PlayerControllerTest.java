@@ -15,8 +15,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
+@SuppressWarnings("ConstantConditions")
 public abstract class PlayerControllerTest {
-    protected static final Long PLAYER_ID = 1L;
+    private static final Long PLAYER_ID = 1L;
     protected static final String PLAYER_NAME = "spews";
 
     protected static final String TWO_DUPLICATE_NAME = "duplicateName";
@@ -289,7 +290,7 @@ public abstract class PlayerControllerTest {
     public void deleteUser(){
         log.info("Start deleteUser test");
         Player toDelete = findByUserName(TEST_DELETE_USER);
-        ResponseEntity<?> response = playerController.delete(toDelete.getId());
+         ResponseEntity<?> response = playerController.delete(toDelete.getId());
 
         //Make sure response is not null and HTTP 200 - OK
         Assert.assertNotNull(response);
