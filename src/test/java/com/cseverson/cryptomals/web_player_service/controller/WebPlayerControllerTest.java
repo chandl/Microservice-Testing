@@ -1,9 +1,18 @@
 package com.cseverson.cryptomals.web_player_service.controller;
 
+import com.cseverson.cryptomals.common.Const;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import java.util.logging.Logger;
 
 public class WebPlayerControllerTest {
+    private static final Logger log = Logger.getLogger(WebPlayerControllerTest.class.getName());
+    private static final String FAKE_USERNAME = "Mr-Faker_123";
 
     @Autowired
     WebPlayerController playerController;
@@ -11,10 +20,52 @@ public class WebPlayerControllerTest {
     //==========create==========
     @Test
     public void createPlayerSuccess() {
+        log.info("start createPlayerSuccess()");
 
+        ResponseEntity<ObjectNode> response = playerController.create(FAKE_USERNAME);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        //success: player is created successfully
+        ObjectNode node = response.getBody();
 
+        String userName = node.get(Const.PLAYER_USERNAME).asText();
+        Assert.assertEquals(FAKE_USERNAME, userName);
+
+        log.info("end createPlayerSuccess()");
+    }
+
+    @Test
+    public void createPlayerBlankName() {
+        log.info("start createPlayerBlankName()");
+
+        ResponseEntity<ObjectNode> response= playerController.create("");
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        log.info("end createPlayerBlankName()");
+    }
+
+    @Test
+    public void createPlayerNullName() {
+        log.info("start createPlayerNullName()");
+
+        ResponseEntity<ObjectNode> response = playerController.create(null);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        log.info("end createPlayerNullName()");
+    }
+
+    @Test
+    public void createPlayerInvalidRegexName() {
+        log.info("start createPlayerInvalidRegexName");
+
+        ResponseEntity<ObjectNode> response = response = playerController.create("\n\f\r\b\t\\\"\'");
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        log.info("end createPlayerInvalidRegexName");
     }
 
     //==========update==========
