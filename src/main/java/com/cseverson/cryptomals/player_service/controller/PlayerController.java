@@ -113,7 +113,7 @@ public class PlayerController {
 
         //Save the new player.
         playerRepository.save(newPlayer);
-        ResponseEntity<ObjectNode> response = ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(newPlayer.toObjectNode());
+        ResponseEntity<ObjectNode> response = ResponseEntity.status(HttpStatus.OK).body(newPlayer.toObjectNode());
 
         log.info("player-service create() returned: " +  response);
 
@@ -126,7 +126,7 @@ public class PlayerController {
      * @param updatedPlayer The updated player information.
      * @return BAD_REQUEST or OK
      */
-    @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT)
+    @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> update( @RequestBody Player updatedPlayer){
         //TODO enable secured requests for these updates.
 
@@ -155,7 +155,7 @@ public class PlayerController {
      * @param userId The ID of the user to delete
      * @return BAD_REQUEST, NOT_FOUND, or OK
      */
-    @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE)
+    @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> delete(@PathVariable(Const.PLAYER_ID) Long userId){
         log.info("player-service delete() invoked for id: " + userId);
 
