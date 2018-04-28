@@ -11,9 +11,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -109,23 +111,46 @@ public class WebPlayerService {
     }
 
     public ResponseEntity<ObjectNode> findById(Long id){
-        // TODO - search for this id, return null if not found
         log.info("findById() invoked for: " + id);
 
-        Player player = restTemplate.getForObject(serviceUrl + "/player/{id}", Player.class, id);
+        if(id == null || id < 0){
+            log.warning("findById() returned BAD_REQUEST for id: " + id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create("Invalid ID supplied."));
+        }
+
+        ObjectNode player = restTemplate.getForObject(serviceUrl + "/player/{id}", ObjectNode.class, id);
 
         if(player == null){
-            //return not found
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JSONError.create("No Player found with this ID."));
         }
 
-
-        return ResponseEntity.status(HttpStatus.OK).body(player.toObjectNode());
+        return ResponseEntity.status(HttpStatus.OK).body(player);
     }
 
     public ResponseEntity<ArrayNode> byUserName(String name){
-        // TODO - find a list of players with a similar username.
-        return null;
+
+        log.info("byUserName() invoked for: " + name);
+
+        if(name == null || name.length() == 0){
+            log.warning("byUserName() returned BAD_REQUEST for name: " + name);
+            ArrayList<String> err = new ArrayList<String>();
+            err.add("Invalid Player Name: " + name);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.createMutli(err));
+        }
+
+        ArrayNode players;
+        try{
+            players = restTemplate.getForObject( serviceUrl + "/players/{userName}", ArrayNode.class, name);
+        }catch(HttpServerErrorException ex){ // An exception will be thrown when no player is found.
+            log.warning("byUserName() returned NOT_FOUND. No player found with name: " + name);
+            ArrayList<String> err = new ArrayList<String>();
+            err.add("No Player found with name: " + name);
+
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JSONError.createMutli(err));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(players);
     }
 
 }

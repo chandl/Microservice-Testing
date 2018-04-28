@@ -1,6 +1,8 @@
 package com.cseverson.cryptomals.web_player_service.controller;
 
 import com.cseverson.cryptomals.common.Const;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Assert;
 import org.junit.Test;
@@ -125,13 +127,27 @@ public class WebPlayerControllerTest {
     @Test
     public void findByNullId() {
 
-        //fail: user ID supplied is null
-        //fail: user ID not found
-        //success: player is found successfully
+        log.info("start findByNullId()");
+
+        ResponseEntity<ObjectNode> response = playerController.findById(null);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        log.info("end findByNullId()");
     }
 
     @Test
     public void findByInvalidId() {
+
+        log.info("start findByInvalidId()");
+
+        ResponseEntity<ObjectNode> response = playerController.findById(100000L);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        log.info("end findByInvalidId()");
     }
 
     @Test
@@ -147,7 +163,7 @@ public class WebPlayerControllerTest {
         String userName = node.get(Const.PLAYER_USERNAME).asText();
 
         log.info("Output: " + node.toString());
-//        Assert.assertEquals(FAKE_USERNAME, userName);
+        Assert.assertEquals("spews", userName);
 
         log.info("end findByIdSuccess()");
     }
@@ -156,25 +172,101 @@ public class WebPlayerControllerTest {
     //==========findByName==========
     @Test
     public void findByNullName() {
+        log.info("start findByNullName()");
 
-        //fail: username null
-        //fail: username not found
-        //success: one user found.
-        //success: multiple users found.
+        ResponseEntity<ArrayNode> response = playerController.findByName(null);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        ArrayNode node = response.getBody();
+        Assert.assertEquals(1, node.size());
+
+        JsonNode err = node.get(0);
+        String error = err.get("error").asText();
+
+        log.info("Output: " + node.toString() + ". Error:" + error);
+        Assert.assertNotNull(error);
+        Assert.assertTrue(error.length() > 0);
+
+        log.info("end findByNullName()");
+    }
+
+    @Test
+    public void findByBadRegexName() {
+        log.info("start findByBadRegexName");
+
+        ResponseEntity<ObjectNode> response = response = playerController.create("\n\f\r\b\t\\\"\'");
+
+        log.info("end findByBadRegexName");
     }
 
     @Test
     public void findByInvalidName() {
+        // aklsjdflkjuyioygio1982903890u
+        log.info("start findByInvalidName()");
 
+        ResponseEntity<ArrayNode> response = playerController.findByName("aklsjdflkjuyioygio1982903890u");
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        ArrayNode node = response.getBody();
+        Assert.assertEquals(1, node.size());
+
+        JsonNode err = node.get(0);
+        String error = err.get("error").asText();
+
+        log.info("Output: " + node.toString() + ". Error:" + error);
+        Assert.assertNotNull(error);
+        Assert.assertTrue(error.length() > 0);
+
+        log.info("end findByInvalidName()");
     }
 
     @Test
     public void findByNameOneUser() {
+        // chandler
 
+        log.info("start findByNameOneUser()");
+
+        ResponseEntity<ArrayNode> response = playerController.findByName("chandler");
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ArrayNode node = response.getBody();
+        Assert.assertEquals(1, node.size());
+
+        JsonNode p = node.get(0);
+        String userName = p.get(Const.PLAYER_USERNAME).asText();
+
+        log.info("Output: " + node.toString() + ". Player 0:" + p.toString());
+        Assert.assertEquals("chandler", userName);
+
+        log.info("end findByNameOneUser()");
     }
 
     @Test
     public void findByNameMultiUser() {
+        //same & same
 
+        log.info("start findByNameMultiUser()");
+
+        ResponseEntity<ArrayNode> response = playerController.findByName("same");
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ArrayNode node = response.getBody();
+        Assert.assertEquals(2, node.size());
+
+        JsonNode p1 = node.get(0);
+        String userName = p1.get(Const.PLAYER_USERNAME).asText();
+
+        log.info("Output: " + node.toString());
+        Assert.assertEquals("same", userName);
+
+        log.info("end findByNameMultiUser()");
     }
 }

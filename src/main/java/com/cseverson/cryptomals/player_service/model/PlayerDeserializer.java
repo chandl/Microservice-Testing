@@ -42,6 +42,7 @@ public class PlayerDeserializer extends JsonDeserializer {
         }else{
             Player p = controller.byId(id);
 
+
             if(p == null){
                 log.warning("FAILED to find player with ID: " +id + ". Request: " + node.toString());
                 return null;

@@ -83,10 +83,12 @@ public class WebPlayerController {
 
     @RequestMapping(value = Routes.GET_PLAYERS_BY_NAME, method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayNode> findByName(@PathVariable(Const.PLAYER_USERNAME) String userName){
-        //TODO - create findByName()
 
-        //PlayerContorller will respond with a List of Player objects. Must convert to ArrayNode
-        return null;
+        log.info("web-player-service findByName() invoked: " + userName);
+        ResponseEntity<ArrayNode> output = playerService.byUserName(userName);
+        log.info("web-player-service findByName() received: " + output.toString());
+
+        return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
 }
