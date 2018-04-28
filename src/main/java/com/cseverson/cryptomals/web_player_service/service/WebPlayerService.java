@@ -1,5 +1,6 @@
 package com.cseverson.cryptomals.web_player_service.service;
 
+import com.cseverson.cryptomals.helper.JSONBuilder;
 import com.cseverson.cryptomals.helper.JSONError;
 import com.cseverson.cryptomals.player_service.model.Player;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,8 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -87,10 +87,37 @@ public class WebPlayerService {
 
         log.info("update() invoked for id: " + playerId + ". Updated: " + updatedPlayerJSON);
 
+        if(playerId == null || playerId < 0){
+            String error = "Invalid Player ID supplied: " + playerId;
+            log.warning(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        if(updatedPlayerJSON == null ){
+            String error = "No Updated Player Information supplied";
+            log.warning(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>(updatedPlayerJSON, headers);
-        ResponseEntity<ObjectNode> response = restTemplate.exchange(serviceUrl + "/player/update/{id}", HttpMethod.PUT, entity, ObjectNode.class, playerId);
+        ResponseEntity<ObjectNode> response = null;
+        try{
+            response = restTemplate.exchange(serviceUrl + "/player/update/{id}", HttpMethod.PUT, entity, ObjectNode.class, playerId);
+
+        }catch(HttpStatusCodeException ex){ //RestTemplate.exchange() throws exceptions - we must catch in order to pass along the underlying issue.
+            try { //handle errors in a funky way since we call exchange() on RestTemplate
+                ObjectNode node = (ObjectNode) new ObjectMapper().readTree(ex.getResponseBodyAsString());
+                log.warning("update() encountered an exception for id: " + playerId+". Response: " + node);
+                return ResponseEntity.status(ex.getStatusCode()).body(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        log.info("update() returned " + response +" for id: " + playerId + '.');
 
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }

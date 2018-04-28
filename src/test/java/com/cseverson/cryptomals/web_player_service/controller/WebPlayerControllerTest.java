@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.sql.Timestamp;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public class WebPlayerControllerTest {
@@ -72,46 +74,79 @@ public class WebPlayerControllerTest {
 
     //==========update==========
     @Test
-    public void updatePlayerNullName() {
+    public void updatePlayerNull() {
+        ResponseEntity<ObjectNode> re = playerController.update(1L, null);
 
-        //fail: supplied player is null
-        //fail: supplied player is unknown (not in DB)
-        //success: player is successfully updated
-
+        Assert.assertNotNull(re);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
     }
 
     @Test
-    public void updateUnknownPlayer() {
+    public void updatePlayerBadId() {
+        ResponseEntity<ObjectNode> re = playerController.update(-1L, null);
 
+        Assert.assertNotNull(re);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+
+    @Test
+    public void updatePlayerMismatch() {
+        ResponseEntity<ObjectNode> res = playerController.create(UUID.randomUUID().toString());
+        ObjectNode node = res.getBody();
+
+        ResponseEntity<ObjectNode> re = playerController.update(2L, node.toString());
+
+        Assert.assertNotNull(re);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, re.getStatusCode());
+    }
+
+    @Test
+    public void updatePlayerNotFound() {
+        ResponseEntity<ObjectNode> res = playerController.create(UUID.randomUUID().toString());
+        ObjectNode node = res.getBody();
+
+        node.put(Const.PLAYER_ID, 1000L);
+        ResponseEntity<ObjectNode> re = playerController.update(1000L, node.toString());
+
+        Assert.assertNotNull(re);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, re.getStatusCode());
     }
 
     @Test
     public void updatePlayerSuccess() {
         // ads viewed, time played, heartCount, nextHeartTime
 
-
         log.info("start updatePlayerSuccess()");
 
-        ResponseEntity<ObjectNode> re = playerController.findById(1L);
-        log.info("Find Response: "+ re);
-        Assert.assertNotNull(re);
-        Assert.assertEquals(HttpStatus.OK, re.getStatusCode());
+        ResponseEntity<ObjectNode> re = playerController.create(UUID.randomUUID().toString());
+
 
         ObjectNode node = re.getBody();
         int upOne = node.get(Const.PLAYER_HEART_COUNT).asInt() +1;
         node.put(Const.PLAYER_HEART_COUNT,  upOne);
 
+        int oneMoreAd = node.get(Const.PLAYER_ADS_VIEWED).asInt() + 1;
+        node.put(Const.PLAYER_ADS_VIEWED, oneMoreAd);
 
-        ResponseEntity<ObjectNode> response = playerController.update(1L, node.toString());
+        long moreTimePlayed = node.get(Const.PLAYER_TIME_PLAYED).asLong() + 1000L;
+        node.put(Const.PLAYER_TIME_PLAYED, moreTimePlayed);
+
+        Timestamp nextHeartTime = new Timestamp(System.currentTimeMillis());
+        node.put(Const.PLAYER_NEXT_HEART_DATE, nextHeartTime.toString());
+
+
+        ResponseEntity<ObjectNode> response = playerController.update(node.get(Const.PLAYER_ID).asLong(), node.toString());
         log.info("Update Response: "+ response);
         Assert.assertNotNull(response);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
         ObjectNode reno = response.getBody();
-        Assert.assertEquals(upOne, reno.get(Const.PLAYER_HEART_COUNT));
+        Assert.assertEquals(upOne, reno.get(Const.PLAYER_HEART_COUNT).asInt());
+        Assert.assertEquals(oneMoreAd, reno.get(Const.PLAYER_ADS_VIEWED).asInt());
+        Assert.assertEquals(moreTimePlayed, reno.get(Const.PLAYER_TIME_PLAYED).asLong());
+        Assert.assertEquals(nextHeartTime.toString(), reno.get(Const.PLAYER_NEXT_HEART_DATE).asText());
 
         log.info("end updatePlayerSuccess()");
-
     }
 
     //==========delete==========
