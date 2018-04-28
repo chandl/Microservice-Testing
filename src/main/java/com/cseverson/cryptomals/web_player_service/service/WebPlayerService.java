@@ -2,6 +2,7 @@ package com.cseverson.cryptomals.web_player_service.service;
 
 import com.cseverson.cryptomals.helper.JSONError;
 import com.cseverson.cryptomals.player_service.model.Player;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -81,8 +83,23 @@ public class WebPlayerService {
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
-    public ResponseEntity<ObjectNode> update(Player updatedPlayer){
+    public ResponseEntity<ObjectNode> update(String updatedPlayerJSON){
         //TODO - update a player
+
+        ObjectMapper mapper = new ObjectMapper();
+        Player player = null;
+        try {
+             player = mapper.readValue(updatedPlayerJSON, Player.class);
+
+             log.info("Found Player: " + player);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        HttpEntity<Player> found = new HttpEntity<Player>(new Player())
+
+
+
         return null;
     }
 
@@ -99,10 +116,11 @@ public class WebPlayerService {
 
         if(player == null){
             //return not found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JSONError.create("No Player found with this ID."));
         }
 
 
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(player.toObjectNode());
     }
 
     public ResponseEntity<ArrayNode> byUserName(String name){

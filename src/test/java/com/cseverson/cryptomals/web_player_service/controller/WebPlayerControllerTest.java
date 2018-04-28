@@ -85,6 +85,19 @@ public class WebPlayerControllerTest {
 
     @Test
     public void updatePlayerSuccess() {
+        log.info("start updatePlayerSuccess()");
+
+        ResponseEntity<ObjectNode> response = playerController.update(FAKE_USERNAME);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ObjectNode node = response.getBody();
+
+        String userName = node.get(Const.PLAYER_USERNAME).asText();
+        Assert.assertEquals(FAKE_USERNAME, userName);
+
+        log.info("end updatePlayerSuccess()");
 
     }
 
@@ -123,7 +136,20 @@ public class WebPlayerControllerTest {
 
     @Test
     public void findByIdSuccess() {
+        log.info("start findByIdSuccess()");
 
+        ResponseEntity<ObjectNode> response = playerController.findById(1L);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        ObjectNode node = response.getBody();
+        String userName = node.get(Const.PLAYER_USERNAME).asText();
+
+        log.info("Output: " + node.toString());
+//        Assert.assertEquals(FAKE_USERNAME, userName);
+
+        log.info("end findByIdSuccess()");
     }
 
 

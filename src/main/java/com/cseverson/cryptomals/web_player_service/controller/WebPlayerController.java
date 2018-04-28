@@ -2,6 +2,7 @@ package com.cseverson.cryptomals.web_player_service.controller;
 
 import com.cseverson.cryptomals.common.Const;
 import com.cseverson.cryptomals.common.Routes;
+import com.cseverson.cryptomals.player_service.model.Player;
 import com.cseverson.cryptomals.web_player_service.service.WebPlayerService;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -52,8 +53,13 @@ public class WebPlayerController {
 
     @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectNode> update(@RequestBody String updatedPlayerJSON ){
-        //TODO - create update()
-        return null;
+
+        log.info("web-player-service update() invoked:" + updatedPlayerJSON);
+        ResponseEntity<ObjectNode> output = playerService.update(updatedPlayerJSON);
+        log.info("web-player-service update received: " + output.toString());
+
+
+        return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
     @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -66,9 +72,12 @@ public class WebPlayerController {
     public ResponseEntity<ObjectNode> findById(@PathVariable(Const.PLAYER_ID) Long id){
 
         //TODO - create findById()
+        log.info("web-player-service findById() invoked:" + id);
+        ResponseEntity<ObjectNode> output = playerService.findById(id);
+        log.info("web-player-service findById received: " + output.toString());
 
-        //PlayerController will respond with a Player object - must convert using toObjectNode
-        return null;
+
+        return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
 
