@@ -7,9 +7,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -85,24 +83,16 @@ public class WebPlayerService {
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
-    public ResponseEntity<ObjectNode> update(String updatedPlayerJSON){
-        //TODO - update a player
+    public ResponseEntity<ObjectNode> update(Long playerId, String updatedPlayerJSON){
 
-        ObjectMapper mapper = new ObjectMapper();
-        Player player = null;
-        try {
-             player = mapper.readValue(updatedPlayerJSON, Player.class);
+        log.info("update() invoked for id: " + playerId + ". Updated: " + updatedPlayerJSON);
 
-             log.info("Found Player: " + player);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>(updatedPlayerJSON, headers);
+        ResponseEntity<ObjectNode> response = restTemplate.exchange(serviceUrl + "/player/update/{id}", HttpMethod.PUT, entity, ObjectNode.class, playerId);
 
-//        HttpEntity<Player> found = new HttpEntity<Player>(new Player())
-
-
-
-        return null;
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
     public ResponseEntity<ObjectNode> delete(Long userId){

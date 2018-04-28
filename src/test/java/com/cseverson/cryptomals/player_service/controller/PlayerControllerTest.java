@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -199,13 +200,13 @@ public abstract class PlayerControllerTest {
 
         //null user
         log.info("\tTest NULL user ID");
-        ResponseEntity<?> response = playerController.update(null);
+        ResponseEntity<?> response = playerController.update(null, null);
         Assert.assertNotNull(response);
         Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         //unknown player
         Player plr = new Player("badNameToTestUpdateUserFail");
-        response = playerController.update(plr);
+        response = playerController.update(0L, plr.toObjectNode());
         Assert.assertNotNull(response);
         Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 
@@ -215,7 +216,9 @@ public abstract class PlayerControllerTest {
     @Test
     public void updateUserSuccess(){
         log.info("Start updateUserSuccess test");
-        Player toUpdate = null;
+        Player toUpdate = new Player(TEST_UPDATE_USER);
+        playerController.create(toUpdate);
+
         if((toUpdate = findByUserName(TEST_UPDATE_USER)) == null){
            Assert.fail("Failure Finding Test Update Player: " + TEST_UPDATE_USER);
         }
@@ -224,11 +227,17 @@ public abstract class PlayerControllerTest {
         int playerCount = playerController.getAllPlayers().size();
 
         Assert.assertEquals(toUpdate.getAdsViewed(), 0);
-        Assert.assertFalse(toUpdate.isAdmin()); //make sure player is not admin prior to updates
+
+        Timestamp newNextHeartTime = new Timestamp(System.currentTimeMillis());
+        int newHearts = toUpdate.getHeartCount() + 1;
+        Long newTimePlayed = toUpdate.getTimePlayed() + 1000000L;
 
         toUpdate.setAdsViewed(10);
-        toUpdate.setAdminStatus(true); //set player as admin
-        ResponseEntity<?> response = playerController.update(toUpdate); //update player in DB
+        toUpdate.setNextHeartTime(newNextHeartTime);
+        toUpdate.setHeartCount(newHearts);
+        toUpdate.setTimePlayed(newTimePlayed);
+
+        ResponseEntity<?> response = playerController.update(toUpdate.getId(), toUpdate.toObjectNode()); //update player in DB
 
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -244,8 +253,11 @@ public abstract class PlayerControllerTest {
 
 
         Player updated = findByUserName(TEST_UPDATE_USER);
-        Assert.assertTrue(updated.isAdmin()); //make sure the new, found user is an admin now
-        Assert.assertEquals(updated.getAdsViewed(), 10);
+//        Assert.assertTrue(updated.isAdmin()); //make sure the new, found user is an admin now
+        Assert.assertEquals(10, updated.getAdsViewed());
+        Assert.assertEquals(newNextHeartTime, updated.getNextHeartTime());
+        Assert.assertEquals(newHearts, updated.getHeartCount());
+        Assert.assertEquals(newTimePlayed, updated.getTimePlayed());
 
         log.info("UPDATED PLAYER: " + updated);
         int playerCount2 = playerController.getAllPlayers().size();

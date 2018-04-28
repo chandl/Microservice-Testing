@@ -52,10 +52,10 @@ public class WebPlayerController {
     }
 
     @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ObjectNode> update(@RequestBody String updatedPlayerJSON ){
+    public ResponseEntity<ObjectNode> update(@PathVariable(Const.PLAYER_ID) Long userId, @RequestBody String updatedPlayerJSON ){
 
         log.info("web-player-service update() invoked:" + updatedPlayerJSON);
-        ResponseEntity<ObjectNode> output = playerService.update(updatedPlayerJSON);
+        ResponseEntity<ObjectNode> output = playerService.update(userId, updatedPlayerJSON);
         log.info("web-player-service update received: " + output.toString());
 
 

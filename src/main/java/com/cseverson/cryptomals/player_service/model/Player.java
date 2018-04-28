@@ -60,9 +60,9 @@ public class Player implements Serializable{
      */
     protected Player(){
         heartCount = 0;
-        nextHeartTime = null;
+        nextHeartTime = new Timestamp(System.currentTimeMillis());
         adminStatus = false;
-        startDate = null;
+        startDate = new Timestamp(System.currentTimeMillis());;
         timePlayed = 0L;
         adsViewed = 0;
     }
@@ -119,7 +119,7 @@ public class Player implements Serializable{
         return adminStatus;
     }
 
-    public void setAdminStatus(boolean adminStatus) {
+    protected void setAdminStatus(boolean adminStatus) {
         this.adminStatus = adminStatus;
     }
 
@@ -166,7 +166,8 @@ public class Player implements Serializable{
                 .put(Const.PLAYER_NEXT_HEART_DATE, nextHeartTime)
                 .put(Const.PLAYER_ADMIN_STATUS, adminStatus)
                 .put(Const.PLAYER_START_DATE, startDate)
-                .put(Const.PLAYER_TIME_PLAYED, timePlayed);
+                .put(Const.PLAYER_TIME_PLAYED, timePlayed)
+                .put(Const.PLAYER_ADS_VIEWED, adsViewed);
 
        return out;
     }
@@ -185,7 +186,8 @@ public class Player implements Serializable{
                 .put(Const.PLAYER_NEXT_HEART_DATE, nextHeartTime)
                 .put(Const.PLAYER_ADMIN_STATUS, adminStatus)
                 .put(Const.PLAYER_START_DATE, startDate)
-                .put(Const.PLAYER_TIME_PLAYED, timePlayed);
+                .put(Const.PLAYER_TIME_PLAYED, timePlayed)
+                .put(Const.PLAYER_ADS_VIEWED, adsViewed);
         try {
             return mapper.writeValueAsString(out);
         } catch (JsonProcessingException e) {

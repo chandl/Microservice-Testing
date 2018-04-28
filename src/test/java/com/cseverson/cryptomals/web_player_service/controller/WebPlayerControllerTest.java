@@ -87,17 +87,28 @@ public class WebPlayerControllerTest {
 
     @Test
     public void updatePlayerSuccess() {
+        // ads viewed, time played, heartCount, nextHeartTime
+
+
         log.info("start updatePlayerSuccess()");
 
-        ResponseEntity<ObjectNode> response = playerController.update(FAKE_USERNAME);
-        log.info("Response: "+ response);
+        ResponseEntity<ObjectNode> re = playerController.findById(1L);
+        log.info("Find Response: "+ re);
+        Assert.assertNotNull(re);
+        Assert.assertEquals(HttpStatus.OK, re.getStatusCode());
+
+        ObjectNode node = re.getBody();
+        int upOne = node.get(Const.PLAYER_HEART_COUNT).asInt() +1;
+        node.put(Const.PLAYER_HEART_COUNT,  upOne);
+
+
+        ResponseEntity<ObjectNode> response = playerController.update(1L, node.toString());
+        log.info("Update Response: "+ response);
         Assert.assertNotNull(response);
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        ObjectNode node = response.getBody();
-
-        String userName = node.get(Const.PLAYER_USERNAME).asText();
-        Assert.assertEquals(FAKE_USERNAME, userName);
+        ObjectNode reno = response.getBody();
+        Assert.assertEquals(upOne, reno.get(Const.PLAYER_HEART_COUNT));
 
         log.info("end updatePlayerSuccess()");
 

@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -125,26 +126,62 @@ public class PlayerController {
      * @return BAD_REQUEST or OK
      */
     @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update( @RequestBody Player updatedPlayer){
-        //TODO enable secured requests for these updates.
+    public ResponseEntity<?> update(@PathVariable(Const.PLAYER_ID) Long userId, @RequestBody ObjectNode updatedPlayer){
+        log.info("player-service update() invoked for id: " + userId + ". Updated: " + updatedPlayer);
 
-        log.info("player-service update() invoked for player: " + updatedPlayer);
-
-        //handle null user supplied
-        if(updatedPlayer == null ){
-            String error = "Null Player supplied";
-            log.info(error);
+        if(userId == null || userId < 0){
+            String error = "Invalid User ID supplied";
+            log.warning(error);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
         }
 
-        if(playerRepository.findById(updatedPlayer.getId()) == null ){
-            String error = "Player not found in the Database. Use the create method instead.";
+        //handle null user supplied
+        if(updatedPlayer == null ){
+            String error = "Null Updated Player supplied";
+            log.warning(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        if(updatedPlayer.get(Const.PLAYER_ID).asLong() != userId){
+            String error = "Supplied Player ID Does not match Updated Player Info.";
+            log.warning(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        Player toUpdate;
+        if((toUpdate=  playerRepository.findById(userId)) == null ){
+            String error = "Player with id "+ userId +" not found in the Database. ";
             log.info(error);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(JSONError.create(error));
         }
 
-        playerRepository.save(updatedPlayer);
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(updatedPlayer.toObjectNode());
+
+        int newAdsViewed = updatedPlayer.get(Const.PLAYER_ADS_VIEWED).asInt();
+        if(toUpdate.getAdsViewed() != newAdsViewed){
+            log.info("Updating ads viewed for id: " + userId + ". Old: " + toUpdate.getAdsViewed() +". New: " + newAdsViewed);
+            toUpdate.setAdsViewed(newAdsViewed);
+        }
+
+        Timestamp newHeartDate =Timestamp.valueOf(updatedPlayer.get(Const.PLAYER_NEXT_HEART_DATE).asText());
+        if(toUpdate.getNextHeartTime().getTime() != newHeartDate.getTime()){
+            log.info("Updating new heart date for id: " + userId + ". Old: " + toUpdate.getNextHeartTime() +". New: " + newHeartDate);
+            toUpdate.setNextHeartTime(new Timestamp(newHeartDate.getTime()));
+        }
+
+        int newHeartCount = updatedPlayer.get(Const.PLAYER_HEART_COUNT).asInt();
+        if(toUpdate.getHeartCount() != newHeartCount){
+            log.info("Updating heart count for id: " + userId + ". Old: " + toUpdate.getHeartCount()  +". New: " + newHeartCount);
+            toUpdate.setHeartCount(newHeartCount);
+        }
+
+        Long newTimePlayed = updatedPlayer.get(Const.PLAYER_TIME_PLAYED).asLong();
+        if(toUpdate.getTimePlayed() != newTimePlayed){
+            log.info("Updating time played for id: " + userId + ". Old: " + toUpdate.getTimePlayed()  +". New: " + newTimePlayed);
+            toUpdate.setTimePlayed(newTimePlayed);
+        }
+
+        playerRepository.save(toUpdate);
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type", "application/json").body(toUpdate.toObjectNode());
     }
 
     /**

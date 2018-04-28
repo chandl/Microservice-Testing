@@ -9,6 +9,7 @@ public interface Const {
     String PLAYER_ADMIN_STATUS = "adminStatus";
     String PLAYER_START_DATE = "startDate";
     String PLAYER_TIME_PLAYED = "timePlayed";
+    String PLAYER_ADS_VIEWED = "adsViewed";
 
     interface DB {
         //Player Column Naming Constants
