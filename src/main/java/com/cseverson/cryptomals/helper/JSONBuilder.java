@@ -6,14 +6,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class JSONBuilder {
 
-    private ObjectMapper mapper;
-    private ArrayNode arrayNode;
     private ObjectNode response;
     private JSONBuilder instance;
 
     private JSONBuilder(){
-        mapper = new ObjectMapper();
-        arrayNode = mapper.createArrayNode();
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode arrayNode = mapper.createArrayNode();
         response = mapper.createObjectNode();
         instance = this;
     }
