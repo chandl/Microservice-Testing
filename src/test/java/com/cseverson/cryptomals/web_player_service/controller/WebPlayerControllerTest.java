@@ -153,19 +153,44 @@ public class WebPlayerControllerTest {
 
     @Test
     public void deletePlayerNullId() {
+        log.info("start deletePlayerNullId()");
 
-        //fail: user ID is null
-        //fail: user ID is invalid
-        //success: player is successfully deleted
+        ResponseEntity<ObjectNode> response = playerController.delete(null);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        log.info("end deletePlayerNullId()");
     }
 
     @Test
-    public void deletePlayerInvalidId() {
+    public void deletePlayerNotFound() {
+        log.info("start deletePlayerInvalidId()");
 
+        ResponseEntity<ObjectNode> response = playerController.delete(1000L);
+        log.info("Response: "+ response);
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+
+        log.info("end deletePlayerInvalidId()");
     }
 
     @Test
     public void deletePlayerSuccess() {
+        String toDelete = UUID.randomUUID().toString();
+        ResponseEntity<ObjectNode> created = playerController.create(toDelete);
+        long newId = created.getBody().get(Const.PLAYER_ID).asLong();
+        Assert.assertEquals(HttpStatus.OK, created.getStatusCode());
+
+        ResponseEntity<ObjectNode> find = playerController.findById(newId);
+        Assert.assertEquals(HttpStatus.OK, find.getStatusCode());
+
+        ResponseEntity<ObjectNode> delete = playerController.delete(newId);
+        Assert.assertNotNull(delete);
+        Assert.assertEquals(HttpStatus.OK, delete.getStatusCode());
+
+        find = playerController.findById(newId);
+        Assert.assertEquals(HttpStatus.NOT_FOUND, find.getStatusCode());
 
     }
 
@@ -242,7 +267,9 @@ public class WebPlayerControllerTest {
     public void findByBadRegexName() {
         log.info("start findByBadRegexName");
 
-        ResponseEntity<ObjectNode> response = response = playerController.create("\n\f\r\b\t\\\"\'");
+        ResponseEntity<ArrayNode> response = response = playerController.findByName("\n\f\r\b\t\\\"\'");
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 
         log.info("end findByBadRegexName");
     }

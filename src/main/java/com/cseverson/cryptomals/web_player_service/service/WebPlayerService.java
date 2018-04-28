@@ -83,6 +83,14 @@ public class WebPlayerService {
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
+    /**
+     * Performs error checking and validation before calling the PlayerService HTTP
+     * Endpoint to send a request to update an existing user.
+     *
+     * @param playerId The user ID of the user to update.
+     * @param updatedPlayerJSON The updated JSON of the new user.
+     * @return HTTP OK or HTTP BAD_REQUEST
+     */
     public ResponseEntity<ObjectNode> update(Long playerId, String updatedPlayerJSON){
 
         log.info("update() invoked for id: " + playerId + ". Updated: " + updatedPlayerJSON);
@@ -122,11 +130,53 @@ public class WebPlayerService {
         return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
+    /**
+     * Performs error checking and validation before calling the PlayerService HTTP
+     * Endpoint to send a request to delete an existing user.
+     *
+     * @param userId the Player ID of the user to be deleted.
+     * @return HTTP OK (if deleted), HTTP BAD_REQUEST (errors in request), or HTTP NOT_FOUND (player not found)
+     */
     public ResponseEntity<ObjectNode> delete(Long userId){
-        //TODO - delete a player
-        return null;
+        log.info("delete() invoked for: " + userId);
+
+        if(userId == null || userId < 0){
+            String error = "Invalid Player ID supplied: " + userId;
+            log.warning(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.create(error));
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>("", headers);
+
+        ResponseEntity<ObjectNode> response = null;
+
+        try{
+            response = restTemplate.exchange(serviceUrl + "/player/delete/{id}", HttpMethod.DELETE, entity, ObjectNode.class, userId);
+
+        }catch(HttpStatusCodeException ex){
+
+            try { //handle errors in a funky way since we call exchange() on RestTemplate
+                ObjectNode node = (ObjectNode) new ObjectMapper().readTree(ex.getResponseBodyAsString());
+                log.warning("delete() encountered an exception for id: " + userId +". Response: " + node);
+                return ResponseEntity.status(ex.getStatusCode()).body(node);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(response.getBody());
     }
 
+    /**
+     * Performs error checking and then calls the PlayerService HTTP endpoint to
+     * find a single user by ID.
+     *
+     * @param id The ID of the user to search for.
+     * @return HTTP BAD_REQUEST (errors in request), HTTP OK (player returned), or HTTP NOT_FOUND (player not found)
+     */
     public ResponseEntity<ObjectNode> findById(Long id){
         log.info("findById() invoked for: " + id);
 
@@ -144,6 +194,13 @@ public class WebPlayerService {
         return ResponseEntity.status(HttpStatus.OK).body(player);
     }
 
+    /**
+     * Performs error validation, input sanitization, and then queries the PlayerService
+     * HTTP Endpoint to find Player(s) by username.
+     *
+     * @param name The username to search for.
+     * @return A list of players that are found with similar usernames.
+     */
     public ResponseEntity<ArrayNode> byUserName(String name){
 
         log.info("byUserName() invoked for: " + name);
@@ -154,6 +211,17 @@ public class WebPlayerService {
             err.add("Invalid Player Name: " + name);
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.createMutli(err));
+        }
+
+        // Check for special characters in the name.
+        Pattern p = Pattern.compile("[^a-zA-Z0-9.\\-_]", Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(name);
+        if(m.find()){
+            String error = "Username Contains Special Characters that are not Allowed: " + name;
+            log.warning(error);
+            ArrayList<String> errs = new ArrayList<String>();
+            errs.add(error);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JSONError.createMutli(errs));
         }
 
         ArrayNode players;

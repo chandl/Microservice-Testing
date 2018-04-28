@@ -156,28 +156,37 @@ public class PlayerController {
         }
 
 
-        int newAdsViewed = updatedPlayer.get(Const.PLAYER_ADS_VIEWED).asInt();
-        if(toUpdate.getAdsViewed() != newAdsViewed){
-            log.info("Updating ads viewed for id: " + userId + ". Old: " + toUpdate.getAdsViewed() +". New: " + newAdsViewed);
-            toUpdate.setAdsViewed(newAdsViewed);
+        if(updatedPlayer.get(Const.PLAYER_ADS_VIEWED) != null){
+            int newAdsViewed = updatedPlayer.get(Const.PLAYER_ADS_VIEWED).asInt();
+            if(toUpdate.getAdsViewed() != newAdsViewed){
+                log.info("Updating ads viewed for id: " + userId + ". Old: " + toUpdate.getAdsViewed() +". New: " + newAdsViewed);
+                toUpdate.setAdsViewed(newAdsViewed);
+            }
         }
 
-        Timestamp newHeartDate =Timestamp.valueOf(updatedPlayer.get(Const.PLAYER_NEXT_HEART_DATE).asText());
-        if(toUpdate.getNextHeartTime().getTime() != newHeartDate.getTime()){
-            log.info("Updating new heart date for id: " + userId + ". Old: " + toUpdate.getNextHeartTime() +". New: " + newHeartDate);
-            toUpdate.setNextHeartTime(new Timestamp(newHeartDate.getTime()));
+        if(updatedPlayer.get(Const.PLAYER_NEXT_HEART_DATE) != null){
+            Timestamp newHeartDate =Timestamp.valueOf(updatedPlayer.get(Const.PLAYER_NEXT_HEART_DATE).asText());
+            if(toUpdate.getNextHeartTime().getTime() != newHeartDate.getTime()){
+                log.info("Updating new heart date for id: " + userId + ". Old: " + toUpdate.getNextHeartTime() +". New: " + newHeartDate);
+                toUpdate.setNextHeartTime(new Timestamp(newHeartDate.getTime()));
+            }
         }
 
-        int newHeartCount = updatedPlayer.get(Const.PLAYER_HEART_COUNT).asInt();
-        if(toUpdate.getHeartCount() != newHeartCount){
-            log.info("Updating heart count for id: " + userId + ". Old: " + toUpdate.getHeartCount()  +". New: " + newHeartCount);
-            toUpdate.setHeartCount(newHeartCount);
+
+        if(updatedPlayer.get(Const.PLAYER_HEART_COUNT) != null){
+            int newHeartCount = updatedPlayer.get(Const.PLAYER_HEART_COUNT).asInt();
+            if(toUpdate.getHeartCount() != newHeartCount){
+                log.info("Updating heart count for id: " + userId + ". Old: " + toUpdate.getHeartCount()  +". New: " + newHeartCount);
+                toUpdate.setHeartCount(newHeartCount);
+            }
         }
 
-        Long newTimePlayed = updatedPlayer.get(Const.PLAYER_TIME_PLAYED).asLong();
-        if(toUpdate.getTimePlayed() != newTimePlayed){
-            log.info("Updating time played for id: " + userId + ". Old: " + toUpdate.getTimePlayed()  +". New: " + newTimePlayed);
-            toUpdate.setTimePlayed(newTimePlayed);
+        if(updatedPlayer.get(Const.PLAYER_TIME_PLAYED) != null){
+            Long newTimePlayed = updatedPlayer.get(Const.PLAYER_TIME_PLAYED).asLong();
+            if(toUpdate.getTimePlayed() != newTimePlayed){
+                log.info("Updating time played for id: " + userId + ". Old: " + toUpdate.getTimePlayed()  +". New: " + newTimePlayed);
+                toUpdate.setTimePlayed(newTimePlayed);
+            }
         }
 
         playerRepository.save(toUpdate);

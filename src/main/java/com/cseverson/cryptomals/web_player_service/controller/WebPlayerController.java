@@ -36,7 +36,7 @@ public class WebPlayerController {
 
     /**
      * Front end request mapping to create a player.
-     * Is routed through the WebPlayerService to call the PlayerService HTTP endpoint.
+     * Is routed through the {@link WebPlayerService} to call the PlayerService HTTP endpoint.
      *
      * @param userName The user name of the player to be created.
      * @return HTTP OK or HTTP BAD_REQUEST
@@ -51,6 +51,13 @@ public class WebPlayerController {
         return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body( output.getBody());
     }
 
+    /**
+     * Front end request mapping to update a player.
+     * It is routed through the {@link WebPlayerService} to call the PlayerService HTTP endpoint.
+     *
+     * @param userId The ID of the user to update.
+     * @param updatedPlayerJSON A JSON-Formatted String of the updated user fields.
+     */
     @RequestMapping(value=Routes.PUT_UPDATE_PLAYER, method=RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectNode> update(@PathVariable(Const.PLAYER_ID) Long userId, @RequestBody String updatedPlayerJSON ){
 
@@ -62,12 +69,27 @@ public class WebPlayerController {
         return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
+    /**
+     * Front end request mapping to delete a player.
+     * Is routed through the {@link WebPlayerService} to call the PlayerService HTTP endpoint.
+     *
+     * @param userId The ID of the user to delete.
+     */
     @RequestMapping(value=Routes.DELETE_USER, method=RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectNode> delete(@PathVariable(Const.PLAYER_ID) Long userId){
-        //TODO - create delete()
-        return null;
+        log.info("web-player-service delete() invoked:" + userId);
+        ResponseEntity<ObjectNode> output = playerService.delete(userId);
+        log.info("web-player-service delete received: " + output.toString());
+
+        return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
+    /**
+     * Front end request mapping to find a single player by ID.
+     * Is routed through the {@link WebPlayerService} to call the PlayerService HTTP endpoint.
+     *
+     * @param id The ID of the player to search for.
+     */
     @RequestMapping(value=Routes.GET_PLAYER_BY_ID, method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ObjectNode> findById(@PathVariable(Const.PLAYER_ID) Long id){
 
@@ -80,7 +102,12 @@ public class WebPlayerController {
         return ResponseEntity.status(output.getStatusCode()).header("Content-Type", "application/json").body(output.getBody());
     }
 
-
+    /**
+     * Front end request mapping to find a Player or Players by name.
+     * Is routed through the {@link WebPlayerService} to call the PlayerService HTTP endpoint.
+     *
+     * @param userName The username to search for.
+     */
     @RequestMapping(value = Routes.GET_PLAYERS_BY_NAME, method=RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ArrayNode> findByName(@PathVariable(Const.PLAYER_USERNAME) String userName){
 
