@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.logging.Logger;
 
 @Entity
-@Table(name = "T_TRANSACTIONS")
+@Table(name = "T_PRICE_HISTORY")
 public class PriceHistory implements Serializable {
     public static final Logger log = Logger.getLogger(PriceHistory.class.getName());
     public static final long serialVersionUID = 1L;
@@ -18,7 +18,7 @@ public class PriceHistory implements Serializable {
     protected Long historyId;
 
     //foreign key
-    @Column(name = Const.DB.HISTORY_COIN_FK_COL)
+    @Column(name = Const.DB.HISTORY_COIN_COL)
     protected Long cryptoCoinId;
 
 
